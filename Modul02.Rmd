@@ -1,0 +1,147 @@
+---
+title: "Modul 02 - R for Data Analysis"
+author: "Roni Yunis"
+date: "3/15/2022"
+output: pdf_document
+---
+
+# Membaca dataset
+
+Setelah memahami dasar dari pemerograman R seperti tipe dan struktur data, sekarang kita akan membahas bagaimana cara mengimport dan membaca dataset pada R. Import dataset pada R dapat dilakukan melalui 2 cara:
+1. Melalui melalui menu import dataset pada tab menu File.
+2. Melalui upload file pada pada panel file.
+
+Import dataset tergantung dari jenis format file dari dataset tersebut, ada yang berformat excel, csv, xlsx, dll. Dalam contoh ini kita sudah mengimport dataset pada folder data, dan bisa dilihat pada panel file yang menampung 3 buah dataset dengan format yang berbeda yaitu format: .csv, .xlsx dan .xls
+
+```{r fig.width=2, echo=FALSE}
+knitr::include_graphics(path = "image/data.png")
+```
+
+## data csv
+
+Untuk membaca data dengan format .csv pada R bisa menggunakan fungsi `read.csv()`.
+
+```{r}
+retail <- read.csv("data/OnlineRetail.csv")
+```
+
+setelah kita jalankan fungsi diatas maka nanti pada panel environment yang terbentuk sebuah data dengan nama *retail*
+
+## data excel(.xls)/(.xlsx)
+
+Untuk membaca data dengan format excel atau .xls, dan .xlsx, kita harus menginstall sebuah packages yaitu "readxl", untuk install packages nanti akan dibahas pada bagian khusus dibawah.
+Setelah packages berhasil di install, maka kita harus aktifkan packages tersebut dengan perintah seperti ini:
+
+```{r}
+#panggil library readxl
+library(readxl)
+```
+
+Setelah library "readxl" berhasil dipanggil, maka untuk membaca file .xls bisa menggunakan fungsi `read_excel()`
+
+```{r}
+sales <- read_excel("data/Elecmart Sales.xls", sheet = "Data")
+```
+
+"sheet" menunjukkan nama sheet atau nomor sheet yang ada pada file excel tersebut. 
+
+Untuk membaca data dengan format .xlsx, caranya sama dengan yang sebelumnya
+
+```{r}
+risk <- read_excel("data/Credit Risk Data.xlsx", sheet = "Base Data")
+```
+
+```{r}
+risk
+```
+
+# Memeriksa isi dataset
+
+Setelah kita berhasil mengimport dan membaca dataset, maka langkah selanjutnya harus dilakukan adalah memeriksa isi dari dataset. Ada beberapa fungsi yang sering digunakan yaitu fungsi `str()`, `head()`, `tail()`, `summary()`, `Select()`, dan `filter()`. 
+
+## str()
+
+Fungsi `str()` digunakan untuk melihat struktur dan variabel dari data. Misalkan kita akan melihat struktur data dari objek *retail* yang sebelumnya kita gunakan untuk menyimpan data "OnlineRetail.csv". Cara menggunakan fungsi `str()` adalah:
+
+```{r}
+str(retail)
+```
+kalau fungsi `str(retail)` tersebut kita jalankan, maka akan memperlihat struktur data (jumlah baris dan jumlah kolom), dan variabel-variabel dari data beserta dengan type datanya.
+
+## Head()
+
+Fungsi `head()` digunakan untuk menampilkan 6 data teratas dari dataset. Misalnya kita akan melihat 6 data teratas dari objek *retail*, maka  cara menggunakan fungsi `head()` adalah sebagai berikut:
+
+```{r}
+head(retail)
+```
+
+kalau kita ingin menampilkan 10 data teratas dari objek *retail*, maka bisa dituliskan seperti ini:
+
+```{r}
+#menampilkan 10 data teratas
+head(retail, 10)
+```
+
+*Latihan*
+Cobalah Anda tampilkan 15 data teratas dari objek *sales* dengan fungsi `head()`
+
+```{r}
+#your code
+
+```
+
+
+## Tail()
+
+Fungsi `tail()` digunakan untuk menampilkan 6 data terbawah dari dataset. Misalnya kita akan melihat 6 data terbawah dari objek *retail*, maka cara menggunakan fungsi `tail()` adalah:
+
+```{r}
+tail(retail)
+```
+
+*Latihan*
+Cobalah Anda tampilkan 10 data terbawah dari objek *sales* dengan fungsi `tail()`
+
+```{r}
+#your code
+
+```
+
+## Summary()
+
+Untuk melihat ringkasan dari data, maka bisa digunakan fungsi `summary()`, fungsi ini akan menyajikan ringkasan dari variabel-variabel yang ada dalam dataset. Seperti nilai min, max, mean, Q1, dan Q3 serta juga melihat data kosong (NA's). Penggunakan fungsi `summary()` bisa seperti ini.
+
+```{r}
+summary(retail)
+```
+
+# Bekerja dengan Packages/Library
+
+Dalam Bahasa Pemrograman R, banyak sekali tersedia packages/library yang mendukung analisis data. Setiap library diperuntukkan sesuai dengan kebutuhannya masing-masing. Dalam RStudio ada 2 cara instalasi library yang dapat dilakukan. Bisa melalui panel Console/Script atau melalui panel packages. Berikut ini kita akan bahas secara ringkas bagaimana instalasi packages/library tersebut dilakukan
+
+## Install packages melalui console
+
+Untuk mengintall packages melalui console, dapat secara langsung dengan mengetik script `install.packages("nama library"). Sebagai contoh kita akan mengintall packages *ggplot2*, packages ini digunakan untuk memvisualisasikan hasil analisis bisa dalam bentuk grafik (garis,batang,dll)
+
+```{r fig.width=2, echo=FALSE}
+knitr::include_graphics(path = "image/installpackages.png")
+```
+
+## Install packages melalui panel packages
+
+Untuk cara yang kedua ini adalah menginstall packages melalui panel *packages*. Ada 2 tab pilihan yaitu _Install_ dan _Update_. Tab _Install_ digunakan untuk menginstall packages yang diinginkan, dengan cara memasukkan nama packages yang ingin diinstall kemudian mengklik tombol *Install*. 
+
+```{r fig.width=2, echo=FALSE}
+knitr::include_graphics(path = "image/installpackagespanel.png")
+```
+
+Tab _Update_ digunakan untuk memperbaruhi versi dari packages, dengan cara memilih nama packages dan mengklik tombol *Install Update*
+
+```{r fig.width=2, echo=FALSE}
+knitr::include_graphics(path = "image/updatepackages.png")
+```
+
+# Penutup
+
+Demikian pembahasan kita tentang R untuk Analisis Data, semoga materi ini bisa Anda jadikan sebagai dasar untuk mengikuti materi-materi selanjutnya. *Selamat belajar dan salam sehat selalu*
