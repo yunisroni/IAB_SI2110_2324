@@ -6,7 +6,7 @@ Modul 02 - Analysis Data using R
 
 Modul 03 - Introduction to Descriptive Analytics
 
-Modul 04 - Business Analytics Process and Data Exploration - 1
+Modul 04 - Business Analytics Process and Data Exploration
 
 Modul 05 - Classification
 
