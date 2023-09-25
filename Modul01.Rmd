@@ -77,7 +77,7 @@ knitr::include_graphics(path = "image/panel.png")
   - Tab Help : Menampilkan dokumentasi resmi dari setiap fungsi     
 
 
-# R Markdown
+## R Markdown
 
 R markdown dapat digunakan untuk membuat laporan dari analisa dengan standar yang tinggi dan sangat baik. Dengan RMarkdown kita bisa menghasilkan laporan analisis yang kita buat kedalam bentuk HTML dan PDF. Untuk menghasil kedua file tersebut kita bisa menggunakan fungsi `knit` dari packages `rmarkdown.`
 
@@ -102,7 +102,7 @@ getwd()
 ```
 
 
-# Membuat objek di R
+## Membuat objek di R
 
 R menyimpan data ke dalam objek R, objek tersebut disimpan dalam memori dari setiap sesi di R, berikut merupakan contoh dari pembuatan objek di R:
 
@@ -131,7 +131,7 @@ Cobalah Anda buat sebuah objek `Nama` dan isi dengan nama Anda sendiri.
 ```
 
 
-# Tipe-tipe data di R
+## Tipe-tipe data di R
 
 Pada umumnya struktur data dari objek di R adalah Vector. Vector merupakan kumpulan beberapa nilai yang memiliki tipe data yang sama dan tersusun dalam satu dimensi. Ada 5 buah type data di R yaitu: character, complex, numeric, integer, dan logical. Coba Anda jalankan code berikut ini:
 
@@ -200,11 +200,11 @@ Tentukan type data dari vector-vector di bawah ini?
 - c(1,2,3,4,5L)
 
 
-# Struktur Data di R
+## Struktur Data di R
 
 Setelah Anda mengetahui bagaimana cara menyimpan suatu objek ke dalam struktur data vector dan bagaimana sifat dari suatu vector, di R, terdapat pula beberapa cara untuk menyimpan elemen-elemen ke dalam objek selain vector, yakni ada pula struktur data list, matrix dan data frame. Selanjutnya, akan dibahas masing-masing struktur data tersebut.
 
-## Matrix
+### Matrix
 
 Struktur data `matrix` merupakan salah satu cara di R untuk menyimpan data dalam bentuk objek. Matrix memiliki sifat yang sama dengan vector yaitu hanya dapat menyimpan satu tipe data saja. Adapun cara untuk membuat sebuah `matrix`, Anda dapat menggunakan fungsi `matrix()`:
 
@@ -219,7 +219,7 @@ mat
 
 Perhatikan bagaimana nilai dalam sebuah `matrix` terisi; `matrix` akan terisi secara baris terlebih dahulu karena parameter `byrow` yang bernilai `FALSE` secara _default_. Nilai dalam sebuah `matrix` akan terisi dari indeks `[1, 1]` dapat dibaca sebagai `[row index, column index]` yang merupakan nilai paling kiri atas.
 
-## List
+### List
 
 Dalam `vector` dan `matrix`, kita hanya bisa menggunakan elemen-elemen dengan tipe data yang sama. Jika kita ingin menyimpan beberapa data dengan tipe data yang berbeda, kita bisa menggunakan struktur data `list`:
 
@@ -256,7 +256,7 @@ Untuk mengakses _vector_ yang ada di dalamnya, maka kita bisa menggunakan `[[]]`
 class(our_list[[3]])
 ```
 
-## Data Frame
+### Data Frame
 
 Dalam pengolahan data, seringkali kita dihadapkan dengan data berbentuk tabel; seperti hasil rekapitulasi penjualan dari masing-masing toko. Umumnya, data dengan bentuk seperti ini akan memiliki 2 dimensi, yaitu baris yang menggambarkan setiap observasi dan kolom yang menggambarkan setiap variabel dari data. 
 
