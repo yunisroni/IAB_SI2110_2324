@@ -10,7 +10,7 @@ output: pdf_document
 *Ada 3 hal yang harus di install:*
 
   1. R: https://cran.us.r-project.org/ 
-  2. R Studio: https://www.rstudio.com/products/rstudio/download/
+  2. R Studio: https://posit.co/downloads/
   3. instalasi Rtools untuk memudahkan proses instalasi package dengan mengikuti langkah berikut:
 
     - Silahkan unduh terlebih dahulu instalasi Rtools pada 
