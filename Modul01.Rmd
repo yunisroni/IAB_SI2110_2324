@@ -120,13 +120,16 @@ inteligensi
 Perlu diperhatikan bahwa R bahasa pemrograman yang *case sensitive* sehingga "Analitika Bisnis" akan berbeda dengan "analitika bisnis". Untuk memeriksa apakah nilai pada sisi kiri sama dengan sisi kanannya, bisa menggunakan operator `==` atau persamaan. Jika hasilnya adalah `FALSE` artinya kedua nilai tersebut tidak sama atau berbeda, karena nilai yang disimpan pada objek inteligensi adalah Analitika Bisnis bukan analitika bisnis.
 
 ```{r}
-inteligensi == "analitika bisnis"
+inteligensi == "analitika Bisnis"
 ```
 
 *Latihan*
 Cobalah Anda buat sebuah objek `Nama` dan isi dengan nama Anda sendiri.
 ```{r}
 #your code
+
+nama <- "Roni Yunis"
+nama
 
 ```
 
@@ -160,6 +163,7 @@ Cara mengetahui type data dari suatu objek, Anda dapat menggunakan fungsi `class
 
 ```{r}
 class(orang)
+
 ```
 
 maka hasilnya kalau dijalankan maka objek orang tersebut bertype character.
@@ -169,6 +173,8 @@ Buatlah sebuah objek `harga`, masukkan 3 nilai ini kedalamnya 2500, 3000, 4500. 
 
 ```{r}
 #your code
+harga <- c(2500, 3000, 4500)
+class(harga)
 
 ```
 
@@ -199,6 +205,16 @@ Tentukan type data dari vector-vector di bawah ini?
 - c("satu", 12, 33.3)
 - c(1,2,3,4,5L)
 
+```{r}
+x <-  c(TRUE, 1L, 1/2)
+y <-  c("satu", 12, 33.3)
+z <-  c(1,2,3,4,5L)
+zz <-  c((3i*2), 2L, 3/2) 
+class(x)
+class(y)
+class(z)
+class(zz)
+```
 
 ## Struktur Data di R
 
@@ -213,7 +229,7 @@ Vector : 1 dimensi dan harus tipe data yang sama
 Matrix : 2 dimensi dan harus tipe data yang sama
 
 ```{r}
-mat <- matrix(11:16, nrow = 3, ncol = 2)
+mat <- matrix(11:16, nrow = 2, ncol = 3)
 mat
 ```
 
@@ -234,13 +250,18 @@ ketika melakukan subset pada list menggunakan [] itu berarti kita mengakses *nil
 ```{r}
 class(our_list[[3]]) 
 ```
+```{r}
+class(our_list[[4]])
+```
+
+
 
 *latihan:* 
 coba akses `our_list` pada index ke 4 dan cek tipe datanya menggunakan fungsi `class()`
 
 ```{r}
-our_list[[4]]
-class(our_list[[4]])
+our_list[[2]]
+class(our_list[[2]])
 
 ```
 
@@ -248,6 +269,7 @@ Seperti yang dapat dilihat di atas, sebuah `list` dapat menyimpan objek dengan t
 
 ```{r}
 class(our_list[3])
+class(our_list[[3]])
 ```
 
 Untuk mengakses _vector_ yang ada di dalamnya, maka kita bisa menggunakan `[[]]`:
@@ -281,8 +303,40 @@ female : FALSE, TRUE, FALSE
 
 ```{r}
 #your code
+karyawan <- data.frame(
+  nama = c("Roni", "Aisyah", "Rasford"),
+  usia = c(46, 21, 25),
+  female = c(FALSE, TRUE, FALSE),
+  stringsAsFactors = FALSE
+)
+
+karyawan
 
 ```
+
+*latihan 2*
+buatlah data frame dengan nama "mahasiswa", yang berisikan nilai sebagai berikut:
+NIM : 212110007, 212110043, 212110054, 212110212
+Nama: "james bond", "simbolong", "hutagalung", "victor"
+Alamat:"Medan", "Tarutung", "Siantar", "Pocinky"
+nilai: 80.5, 90.8, 76,4, 100
+status: FALSE, TRUE, FALSE, TRUE
+
+```{r}
+# your code
+mahasiswa <- data.frame(
+  NIM = c(212110007, 212110043, 212110054, 212110212),
+  Nama = c("james bond", "simbolong", "hutagalung", "victor"),
+  Alamat = c("Medan", "Tarutung", "Siantar", "Pocinky"),
+  nilai = c(80.5, 90.8, 76.4, 100),
+  status= c(FALSE, TRUE, FALSE, TRUE),
+  stringsAsFactors = FALSE
+)
+
+mahasiswa
+```
+
+
 
 Gambaran dari rangkuman keempat struktur data yang sudah kita bahas di atas, dapat diilustrasikan seperti gambar di bawah ini:
 
