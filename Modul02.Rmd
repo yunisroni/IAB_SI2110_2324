@@ -215,7 +215,8 @@ library(dplyr)
 ```{r}
 ggplot(retail) +
   aes(x = Country) +
-  geom_bar()
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 ```{r}
 ggplot(risk) +
@@ -234,6 +235,9 @@ ggplot(risk)+
 ```{r}
 head(sales)
 ```
+
+
+
 ```{r}
 str(risk)
 ```
@@ -246,6 +250,29 @@ ggplot(risk)+
   theme_minimal() +
   scale_color_hue()
 ```
+
+```{r}
+head(sales)
+```
+
+
+```{r}
+# Merubah nama kolom dari variabel menjadi satu kata agar mudah digunakan dalam fungsi ggplot2
+colnames(sales)[colnames(sales) == "Items Ordered"] <- "ItemsOrdered"
+colnames(sales)[colnames(sales) == "Card Type"] <- "CardType"
+colnames(sales)[colnames(sales) == "Buy Category"] <- "BuyCategory"
+colnames(sales)[colnames(sales) == "Total Cost"] <- "TotalCost"
+colnames(sales)[colnames(sales) == "High Item"] <- "HighItem"
+sales
+```
+```{r}
+ggplot(sales)+
+  aes(x = Region, y = ItemsOrdered, colour = Gender) +
+  geom_boxplot() +
+  theme_minimal() +
+  scale_color_hue()
+```
+
 
 
 # Penutup
