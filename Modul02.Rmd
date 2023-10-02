@@ -211,7 +211,7 @@ library(ggplot2)
 library(dplyr)
 ```
 
-
+Contoh penggunaan _library ggplot2_
 ```{r}
 ggplot(retail) +
   aes(x = Country) +
