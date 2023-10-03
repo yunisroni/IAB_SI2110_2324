@@ -77,6 +77,8 @@ GUnakalah fungsi `str()` untuk melihat struktur data dari objek `risk` dan `sale
 # your code
 str(risk)
 ```
+
+
 ```{r}
 str(sales)
 ```
@@ -92,7 +94,7 @@ head(retail)
 
 ```{r}
 # Menampilkan 3 data teratas
-head(retail, 3)
+head(retail, 17)
 ```
 
 *Latihan*
@@ -111,6 +113,7 @@ head(sales, 9)
 ```
 ```{r}
 head(sales, 15)
+
 ```
 
 kalau kita ingin menampilkan 10 data teratas dari objek *retail*, maka bisa dituliskan seperti ini:
@@ -207,28 +210,44 @@ knitr::include_graphics(path = "image/updatepackages.png")
 
 Cara memanggil library dalam R, dengan menggunkan fungsi `library()`
 ```{r}
+# Load Packages/Library
+# Packages untuk visualisasi
 library(ggplot2)
+
+# Packages untuk manipulasi data
 library(dplyr)
 ```
+
+```{r}
+head(retail)
+```
+
 
 Contoh penggunaan _library ggplot2_
 ```{r}
 ggplot(retail) +
   aes(x = Country) +
-  geom_bar() +
+  geom_bar() + # grafik batang
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
+
+```{r}
+str(risk)
+```
+
+
 ```{r}
 ggplot(risk) +
   aes(x = Gender) +
-  geom_bar() +
+  geom_bar() +  
   theme_minimal()
 ```
 
 ```{r}
 ggplot(risk)+
   aes(x = Age, y = Savings, colour = Gender) +
-  geom_point() +
+  geom_point() + #grafik titik
   theme_minimal() +
   scale_color_hue()
 ```
@@ -254,6 +273,9 @@ ggplot(risk)+
 ```{r}
 head(sales)
 ```
+```{r}
+str(sales)
+```
 
 
 ```{r}
@@ -263,7 +285,7 @@ colnames(sales)[colnames(sales) == "Card Type"] <- "CardType"
 colnames(sales)[colnames(sales) == "Buy Category"] <- "BuyCategory"
 colnames(sales)[colnames(sales) == "Total Cost"] <- "TotalCost"
 colnames(sales)[colnames(sales) == "High Item"] <- "HighItem"
-sales
+str(sales)
 ```
 ```{r}
 ggplot(sales)+
@@ -271,6 +293,19 @@ ggplot(sales)+
   geom_boxplot() +
   theme_minimal() +
   scale_color_hue()
+```
+```{r}
+ggplot(sales)+
+  aes(x = TotalCost, y = HighItem, colour = BuyCategory) +
+  geom_line() +
+  theme_minimal() +
+  scale_color_hue()
+```
+```{r}
+barplot(sales$ItemsOrdered)
+```
+```{r}
+boxplot(sales$ItemsOrdered)
 ```
 
 
