@@ -1,4 +1,5 @@
-# Resource ini berisikan contoh-contoh penyelesaian dari model/algoritma dengan R Programming yang dibahas dalam mata kuliah Inteligensi dan Analitika Bisnis
+# IAB_SI2110
+Resource ini berisikan contoh-contoh penyelesaian dari model/algoritma dengan R Programming yang dibahas dalam mata kuliah Inteligensi dan Analitika Bisnis
 
 Modul 01 - Introduction to R
 
