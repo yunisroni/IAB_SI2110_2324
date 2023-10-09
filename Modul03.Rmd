@@ -1,7 +1,7 @@
 ---
 title: "Modul 03 - Introduction to Descriptive Analytics"
 author: "Roni Yunis"
-date: "3/20/2022"
+date: "09/10/2023"
 output: pdf_document
 ---
 
@@ -297,6 +297,7 @@ ggplot(asuransi)+
   aes(x = age, y = charges, colour = sex) +
   geom_point() +
   scale_color_hue()
+  
 ```
 Contoh lain dari ggplot dengan menambahkan judul dari grafik
 
