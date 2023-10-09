@@ -47,12 +47,52 @@ max(asuransi$age)
 
 Bisa dilihat bahwa nilai minimum dari umur adalah 18 dan nilai maximum adalah 64
 
+*Latihan*
+1. Berapakah jumlah anak terkecil dan terbanyak dari variabel `children`
+2. Berapakah body massa index yang terkecil dan terbesar dari variabel `bmi`
+
+```{r}
+# your code
+
+
+
+```
+
+
+Hitunglah berapa nilai `charges` paling kecil dan paling besar?
+```{r}
+# Melihat nilai charges paling kecil
+min(asuransi$charges)
+
+# Melihat nilai charges paling besar
+max(asuransi$charges)
+```
+Jadi bisa dilihat bahwa nilai charges terkecil adalah 1121.874, dan nilai charges terbesar adalah 63770.43
+
+
 ## Range
 Fungsi selanjutnya adalah `range()` yang digunakan untuk melihat nilai minimum - maximum
 
 ```{r}
 range(asuransi$age)
 ```
+*Latihan*
+1. Berapakah range dari variabel `children`
+2. Berapakah range dari variabel `bmi`
+
+```{r}
+# your code
+
+
+```
+
+
+hitunglah range dari variabel `charges`
+```{r}
+range(asuransi$charges)
+```
+range dari variabel charges adalah 1121.874 - 63770.428
+
 
 ## Mean
 Fungsi selanjutnya adalah `mean()` yang digunakan untuk melihat nilai rata-rata.
@@ -61,16 +101,23 @@ Fungsi selanjutnya adalah `mean()` yang digunakan untuk melihat nilai rata-rata.
 rata <- mean(asuransi$age)
 rata
 ```
+Jadi umur rata-rata adalah 39.20703
+
+*Latihan*
+1. Berapakah rata-rata dari variabel `children`
+2. Berapakah rata-rata dari variabel `charges`
 
 
 ```{r}
 mean <- mean(asuransi$bmi)
+mean
 ```
 
 Kalau ada dalam data kita data *missing value (NA)*, maka fungsi `mean(asuransi$age, na.rm = TRUE)` bisa kita gunakan, artinya data NA itu tidak termasuk dalam rata-rata yang kita cari.
 
 ```{r}
-mean(asuransi$age, na.rm = TRUE)
+rata_umur <- mean(asuransi$age, na.rm = TRUE)
+rata_umur
 ```
 
 ## Median
@@ -78,6 +125,17 @@ Median atau nilai tengah dari ukuran pemusatan data, bisa menggunakan fungsi `me
 
 ```{r}
 median(asuransi$age)
+```
+Jadi nilai tengah atau media dari umur adalah 39
+
+*Latihan*
+1. Berapakah nilai tengah dari variabel `children`
+2. Berapakah nilai tengah dari variabel `charges`
+
+```{r}
+# your code
+
+
 ```
 
 
@@ -89,6 +147,25 @@ quantile(asuransi$age, 0.5)
 
 Jenis kuantil itu sangat tergantung pada kebutuhan dalam menentukan posisi sekumpulan data. Kuantil 2 disebut median karena data dibagi 2 (0.5). Kalau 4 disebut dengan *Kuartil*
 
+Bagi kuartil = 4 bagian: 0,25, 0,5, 0,75, 100
+
+```{r}
+quantile(asuransi$age, 0.25)
+```
+```{r}
+quantile(asuransi$age, 0.75)
+```
+*Latihan*
+1. Berapakah nilai kuartil 75% dari variabel `children`
+2. Berapakah nilai kuartil 25% dari variabel `charges`
+
+```{r}
+# your code
+
+
+```
+
+
 
 ## Standar Deviasi dan Variance
 Varians adalah ukuran dari seberapa jauh penyebaran data dari nilai rata-ratanya. Jika nilai varians semakin besar itu artinya semakin jauh menyebaran data dari nilai rata-ratanya. Standar Deviasi atau sering disebut dengan **Simpangan Baku** yaitu akar dari nilai varians. Tujuan dari Standar Deviasi adalah untuk mengetahui berapa banyak nilai atau jumlah data yang berbeda dari nilai rata-rata. Kalau kita sederhanakan bahwa Standar Deviasi itu mengukur data yang menyebar di sekitar Mean. Untuk menentukan Standar Deviasi dan Variance bisa menggunakan fungsi `sd()` dan `var()`.
@@ -96,36 +173,69 @@ Varians adalah ukuran dari seberapa jauh penyebaran data dari nilai rata-ratanya
 ```{r}
 # Standar deviasi
 sd <- sd(asuransi$age)
+sd
 
 # Variance
-var(asuransi$age)
+var <- var(asuransi$age)
+var
 
 ```
+*Latihan*
+1. Berapakah nilai sd dan var dari variabel `children`
+2. Berapakah nilai sd dan va dari variabel `charges`
+
+```{r}
+# your code
+
+
+```
+
+
 
 ## Coefisien Varians
 Koerfisien Variansi (CV) adalah rasio antara standar deviasi dengan nilai rata-rata. jadi bisa dihitung seperti ini.
 
 ```{r}
-sd(asuransi$age) / mean(asuransi$age)
+coefisien_varian <- sd(asuransi$age) / mean(asuransi$age)
+coefisien_varian
 ```
 Bisa dilihat bahwa nilai koefisien varians dari umur adalah 0.358
+
+*Latihan*
+1. Berapakah cv dari variabel `children`
+2. Berapakah cv dari variabel `charges`
+
+```{r}
+# your code
+
+
+```
+
 
 ## Correlation
 
 Korelasi digunakan untuk melihat hubungan antar 2 variabel, syarat dari korelasi adalah semua data harus bertype numerik. Kalau dilihat dari data yang kita miliki ada age, bmi, children, charges yang bertype numerik. Dalam contoh ini kita akan menghitung berapa korelasi antara *age* dengan *charges*, maka bisa menggunakan fungsi `cor()`
 
 ```{r}
-cor (asuransi$age, asuransi$charges)
+cor(asuransi$age, asuransi$charges)
 ```
-
+Hitung korelasi dari Umur dengan BMI
 
 ```{r}
 cor(asuransi$age, asuransi$bmi)
 ```
-Korelasi antar bmi - charges, children - bmi, age - children.
-
 
 Nilai korelasi dari kedua variabel tersebut adalah 0.29. Bisa kita simpulkan korelasi dari keduanya lemah. Nilai Korelasi berkisar antara 1 sampai -1. Jika nilai mendekati 1 atau -1 itu artinya hubungan antara 2 variabel kuat, tapi kalau nilai korelasi mendekati 0, artinya hubungan antara 2 variabel lemah.
+
+*Latihan*
+Hitung Korelasi antar bmi - charges, children - bmi, age - children.
+
+```{r}
+# your code
+
+
+```
+
 
 
 ## Tabel Kontingensi
@@ -153,6 +263,16 @@ table(asuransi$sex, asuransi$smoker)
 
 Dari hubungan 2 kategori tersebut, bisa dilihat bahwa frekuensi jumlah laki-laki yang merokok 159 dan perempuan yang merokok 115.
 
+*Latihan*
+Hitung frekuensi hubungan/asosiasi antar bmi - charges, children - bmi, age - children. Gunakan fungsi `table()`
+
+```{r}
+# your code
+
+
+```
+
+
 Untuk melihat frekuensi dan asosiasi antar 2 variabel ini kita juga bisa menggunakan fungsi `xtabs()`. penulisan fungsi tersebut bisa seperti ini.
 
 ```{r}
@@ -165,6 +285,19 @@ Nah selanjutnya adalah bagaimana kita melihat besaran dari proporsi hubungan dar
 
 ```{r}
 prop.table(table(asuransi$sex, asuransi$smoker))
+```
+Hutunglah hubungan sex dengan region, dan berapa nilai proporsi dari hubungan tersebut?
+```{r}
+# nilai frekuensi hubungan antara bmi dengan charger
+sex_region <- table(asuransi$sex, asuransi$region)
+sex_region
+
+```
+```{r}
+#nilai proporsi dari sex dengan region
+prop_sex_region <- prop.table(sex_region)
+prop_sex_region
+
 ```
 
 ```{r}
@@ -183,7 +316,7 @@ Kalau kita ingin menambahkan margin kolom, maka kita bisa ganti *margin = 2*
 Kita juga bisa membulatkan suatu bilangan desimal berkoma dengan fungsi `round()`. Misalnya kita ingin menghitung persentase per baris atau kolom pada proporsi sebelumnya, maka kita bisa tambahkan fungsi `round(prop.table(), 1),2)`. 1 untuk baris, dan 2 untuk kolom atau 2 digit dibelakang koma
 
 ```{r}
-round(prop.table(table(asuransi$sex, asuransi$smoker),1),4)
+round(prop.table(table(asuransi$sex, asuransi$smoker),1),2)
 ```
 
 ## Statistik Deskriptif dengan Fungsi `descr()`
@@ -296,7 +429,8 @@ Berikut adalah contoh bagaimana pengabaran scatterplot dengan `ggplot2`
 ggplot(asuransi)+
   aes(x = age, y = charges, colour = sex) +
   geom_point() +
-  scale_color_hue()
+  scale_color_hue() +
+  theme_minimal()
   
 ```
 Contoh lain dari ggplot dengan menambahkan judul dari grafik
@@ -312,7 +446,7 @@ ggplot(asuransi)+
   theme_minimal()
 ```
 
-## Jawaban Diskusi
+## Latihan
 ```{r}
 # Korelasi variabel charges dengan variabel bmi
 cor (asuransi$charges, asuransi$bmi)
