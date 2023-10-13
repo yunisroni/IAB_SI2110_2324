@@ -76,6 +76,7 @@ Fungsi selanjutnya adalah `range()` yang digunakan untuk melihat nilai minimum -
 ```{r}
 range(asuransi$age)
 ```
+
 *Latihan*
 1. Berapakah range dari variabel `children`
 2. Berapakah range dari variabel `bmi`
@@ -107,6 +108,13 @@ Jadi umur rata-rata adalah 39.20703
 1. Berapakah rata-rata dari variabel `children`
 2. Berapakah rata-rata dari variabel `charges`
 
+```{r}
+# your code
+
+
+```
+
+
 
 ```{r}
 mean <- mean(asuransi$bmi)
@@ -119,6 +127,12 @@ Kalau ada dalam data kita data *missing value (NA)*, maka fungsi `mean(asuransi$
 rata_umur <- mean(asuransi$age, na.rm = TRUE)
 rata_umur
 ```
+```{r}
+rata_bmi <- mean(asuransi$bmi, na.rm = TRUE)
+rata_bmi
+```
+
+
 
 ## Median
 Median atau nilai tengah dari ukuran pemusatan data, bisa menggunakan fungsi `median()`
@@ -126,11 +140,12 @@ Median atau nilai tengah dari ukuran pemusatan data, bisa menggunakan fungsi `me
 ```{r}
 median(asuransi$age)
 ```
-Jadi nilai tengah atau media dari umur adalah 39
+Jadi nilai tengah atau median dari umur adalah 39
 
 *Latihan*
 1. Berapakah nilai tengah dari variabel `children`
 2. Berapakah nilai tengah dari variabel `charges`
+3. Berapakah nilai tengah dari variabel `bmi`
 
 ```{r}
 # your code
@@ -152,12 +167,14 @@ Bagi kuartil = 4 bagian: 0,25, 0,5, 0,75, 100
 ```{r}
 quantile(asuransi$age, 0.25)
 ```
+
 ```{r}
 quantile(asuransi$age, 0.75)
 ```
 *Latihan*
 1. Berapakah nilai kuartil 75% dari variabel `children`
 2. Berapakah nilai kuartil 25% dari variabel `charges`
+3. Berapakah nilai kuantil 50% dari variabel `bmi`
 
 ```{r}
 # your code
@@ -179,10 +196,12 @@ sd
 var <- var(asuransi$age)
 var
 
+
 ```
 *Latihan*
 1. Berapakah nilai sd dan var dari variabel `children`
-2. Berapakah nilai sd dan va dari variabel `charges`
+2. Berapakah nilai sd dan var dari variabel `charges`
+3. Berapakah nilai sd dan var dari variabel `bmi`
 
 ```{r}
 # your code
@@ -201,9 +220,15 @@ coefisien_varian
 ```
 Bisa dilihat bahwa nilai koefisien varians dari umur adalah 0.358
 
+```{r}
+coefisien_varian_2 <- sd/rata_umur
+coefisien_varian_2
+```
+
 *Latihan*
 1. Berapakah cv dari variabel `children`
 2. Berapakah cv dari variabel `charges`
+3. Berapakah cv dari variabel `bmi`
 
 ```{r}
 # your code
@@ -286,6 +311,7 @@ Nah selanjutnya adalah bagaimana kita melihat besaran dari proporsi hubungan dar
 ```{r}
 prop.table(table(asuransi$sex, asuransi$smoker))
 ```
+
 Hutunglah hubungan sex dengan region, dan berapa nilai proporsi dari hubungan tersebut?
 ```{r}
 # nilai frekuensi hubungan antara bmi dengan charger
@@ -293,6 +319,7 @@ sex_region <- table(asuransi$sex, asuransi$region)
 sex_region
 
 ```
+
 ```{r}
 #nilai proporsi dari sex dengan region
 prop_sex_region <- prop.table(sex_region)
@@ -312,6 +339,11 @@ prop.table(table(asuransi$sex, asuransi$smoker), margin = 1)
 ```
 
 Kalau kita ingin menambahkan margin kolom, maka kita bisa ganti *margin = 2*
+
+```{r}
+prop.table(table(asuransi$sex, asuransi$smoker), margin = 2)
+```
+
 
 Kita juga bisa membulatkan suatu bilangan desimal berkoma dengan fungsi `round()`. Misalnya kita ingin menghitung persentase per baris atau kolom pada proporsi sebelumnya, maka kita bisa tambahkan fungsi `round(prop.table(), 1),2)`. 1 untuk baris, dan 2 untuk kolom atau 2 digit dibelakang koma
 
@@ -333,6 +365,9 @@ Contoh penggunaan fungsi `descr()` pada objek asuransi yang menampung 4 buah var
 descr(asuransi,
       heading = TRUE,
       stats = "common")
+```
+```{r}
+descr(asuransi)
 ```
 
 # Visualisasi
@@ -420,7 +455,8 @@ Berikut ini adalah contoh pengambaran barplot dengan fungsi `geom_bar()` dengan 
 ```{r}
 ggplot(asuransi) +
   aes(x = smoker) +
-  geom_bar()
+  geom_bar() +
+  theme_minimal()
 ```
 ### Scatterplot (Point)
 Berikut adalah contoh bagaimana pengabaran scatterplot dengan `ggplot2`
