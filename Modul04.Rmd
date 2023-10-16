@@ -115,6 +115,14 @@ Bisa kita lihat bahwa sekarang variabel *InvoiceDate* type datanya sudah berubah
 
 **Keterangan:** Operator Pipeline atau %>% (dibaca piping) digunakan untuk merangkai beberapa fungsi dalam urutan operasi. Sehingga kita dapat menuliskan lebih dari satu fungsi sekaligus tanpa harus menyimpannya terlebih dahulu. Operator pipeline bisa dibuat dengan cepat menggunakan kombinasi **"ctrl + shift + m"**
 
+*Latihan Penggunaan Piping
+```{r}
+# your code
+
+
+
+```
+
 
 ## Ekplorasi Data
 Untuk Ekplorasi data atau prosesd data, bisa disesuaikan dengan kebutuhan. Untuk mendukung hal tersebut kita bisa menggunakan `library dplyr`. Berikut ini beberapa fungsi lain yang ada dalam dplyr yang bisa kita gunakan.
@@ -129,6 +137,25 @@ head(stockcode85123A)
 ```
 Maka bisa dilihat bahwa, semua data akan ditampilkan hanya StockCode = 85123A
 
+```{r}
+head(retailClean)
+```
+```{r}
+tail(retailClean)
+```
+
+
+*Latihan*
+1. Gunakan fungsi filter untuk menyeleksi Country dari United Kingdom, dan simpan ke dalam objek CountryUK
+2. Gunakan fungsi filter untuk menyeleksi CustomerID = 168675, dan simpan ke dalam objek CusID168675
+
+```{r}
+# your code
+
+
+```
+
+
 Misalnya kita akan memfilter jumlah transaksi hanya dari asal negara United Kingdom pada StockCode 85123A, maka fungsi filter bisa tulis seperti ini.
 
 ```{r}
@@ -136,6 +163,24 @@ UK <- stockcode85123A %>%
   filter(Country == "United Kingdom")
 head(UK)
 ```
+```{r}
+tail(stockcode85123A)
+
+```
+
+
+
+*Latihan*
+1. seleksilah dalam data CusID168675, dengan stockcode = "85123A"
+2. seleksilah dalam data CusID168675, dengan decription = "WHITE HANGING HEART T-LIGHT HOLDER"
+
+```{r}
+# your code
+
+
+
+```
+
 
 ### Count dan Group By
 Fungsi `count()` digunakan untuk mengetahui jumlah data berdasarkan kategori/variabel yang sudah ditentukan sebelumnya. Misalnya dalam kasus ini kita akan hitung jumlah transaksi berdasarkan variabel *Country* yang ada pada objek *stockcode85123A*
@@ -143,6 +188,19 @@ Fungsi `count()` digunakan untuk mengetahui jumlah data berdasarkan kategori/var
 ```{r}
 count(stockcode85123A, Country)
 ```
+
+*Latihan*
+Gunakan fungsi `count` untuk menghitung jumlah:
+1. variabel country pada objek CusID168675
+2. variabel Description pada objek CusID168675
+
+```{r}
+# your code
+
+
+
+```
+
 
 ### Group By dan Arrange
 Fungsi `group_by()`digunakan untuk mengelompokkan data berdasarkan satu atau lebih varibel. Fungsi `arrange()` digunakan untuk mengurutkan data berdasarkan variabel. Pengurutan bisa dilakukan dari kecil ke besar atau sebaliknya.
@@ -178,11 +236,38 @@ retailClean %>%
 ```
 Bisa dilihat bahwa InvoiceNo 547063 berisi sebanyak 294 transaksi.
 
+*Latihan*
+pada Objek retailClean:
+1. Gunakan `group_by`untuk menghitung jumlah transaksi berdasarkan CustomerID
+2. Gunakan `group_by`untuk menghitung jumlah transaksi berdasarkan Description
+
+pada Objek CusID168675:
+3. Gunakan `group_by` untuk menghitung jumlah transaksi berdasarkan Description 
+4. Gunakan `group_by` untuk menghitung jumlah transaksi berdasarkan Country
+
+```{r}
+# your code
+
+
+
+
+```
+
+
 ### Sampling
 Fungsi `sample_n()` digunakan untuk mengambil secara acak data, artinya kita bisa mengambil sampel dari data secara acak. Misalnya kita ingin mengambil sebanyak 5 sampel data dari variabel Quantity pada objek UK.
 
 ```{r}
 sample_n(UK, size = 10)
+```
+*Latihan*
+1. Gunakan fungsi `sample_n()` untuk mengmabil 10 transaksi yang ada pada objek `retailClean`
+2. Gunakan fungsi `sample_n()` untuk mengmabil 5 transaksi yang ada pada objek `stockcode85123A`
+```{r}
+# your code
+sample_n(retailClean, size = 10)
+
+
 ```
 
 ### Select
@@ -200,8 +285,21 @@ head(select(UK, c(1,4)))
 ```{r}
 head(select(UK, c(2,3)))
 ```
+```{r}
+glimpse(stockcode85123A)
+```
 
 
+
+*Latihan*
+1. Gunakan fungsi `select()` untuk menampilkan data stockcode85123A pada kolom InvoiceDate dan CustomerID
+2. Gunakan fungsi `select()` untuk menampilkan data CusID168675 pada kolom InvoiceDate dan Country
+
+```{r}
+# your code
+
+
+```
 
 ### Summarise
 Fungsi `summarise()` digunakan untuk meringkas beberapa nilai data menjadi sebuah nilai. Dalam prakteknya fungsi ini akan sangat berguna kalau digabungkan dengan fungsi-fungsi yang lain. Sebagai contoh dalam kasus ini kita akan menampilkan jumlah traksaksi dari negara UK berdasarkan jumlah Quantity harian. Nilainya kita akan simpan pada objek *UK_daily_retail*
@@ -216,6 +314,17 @@ head(arrange(UK_daily_retail, (-jmlTrans)))
 tail(arrange(UK_daily_retail, (-jmlTrans)))
 ```
 Bisa dilihat bahwa traksaksi paling banyak ada pada tanggal 11-01-2011 dan 18-04-2011 sebanyak 1930 transaksi.
+
+*Latihan*
+gunakan fungsi `summarise()` untuk menampilkan jumlah Quantity berdasarkan StockCode pada objek CusID168675
+
+```{r}
+# your code
+
+
+
+```
+
 
 
 # Visualization Analysis
