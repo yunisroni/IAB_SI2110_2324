@@ -11,13 +11,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Pengantar
 Dalam pembahasan kali ini, kita akan membahas secara umum proses analisis bisnis dan kaitannya dengan ekplorasi data. Tujuan dari analitika bisnis adalah untuk mendapatkan informasi dari data sehingga dapat membuat keputusan binis yang tepat. Dalam proses analisis bisnis ada beberapa tahapan yang harus dilalui yaitu:
+
 1. Memahami masalah bisnis
+
 2. Mengumpulkan data dan mengintegrasikan data
+
 3. Pra Proses data
+
 4. Ekplorasi dan visualisasi data
+
 5. Menentukan teknik pemodelan atau algaritma
+
 6. Evaluasi model
+
 7. Laporkan hasilnya kepada pihak manajemen
+
 8. Kembangkan model
 
 Dari 8 tahapan tersebut, tahapan yang sangat penting dan berpengaruh pada hasil pengembangan model keputusan adalah tahap **Exploratory Data Analysis (EDA)**. EDA adalah proses ekplorasi data yang bertujuan untuk memahami isi dan komponen penyusun data. Biasanya EDA dilakukan dengan beberapa cara; *analisis deskriptif dengan satu variabel*, *analisis relasi dengan dua variabel*, dan *analisis dengan menggunakan lebih dari atau sama dengan tiga variabel.* 
@@ -303,9 +311,13 @@ Pada tahap mempresentasikan review dan laporan manajemen, model matematika yang 
 Setelah teknik pemodelan dan algoritma ditentukan, langkah berikutnya adalah mengembangkan model dan menerapkannya. Keberhasilan dari penerapan model tergantung pada: 
 
 a.	Ukuran perangkat keras yang tepat, memastikan kinerja yang dibutuhkan
+
 b.	Pemrograman yang tepat untuk menangani kemampuan perangkat keras
+
 c.	Integrasi dan pembersihan data yang tepat
+
 d.	Laporan, dasbor, pandangan, keputusan, dan intervensi yang efektif untuk digunakan oleh pengguna akhir atau sistem pengguna akhir
+
 e.	Pelatihan yang efektif untuk pengguna model
 
 
