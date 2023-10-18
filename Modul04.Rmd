@@ -118,7 +118,7 @@ Bisa kita lihat bahwa sekarang variabel *InvoiceDate* type datanya sudah berubah
 *Latihan Penggunaan Piping
 ```{r}
 # your code
-
+%>% %>% %>% %>% %>% %>% %>% %>% %>% %>% 
 
 
 ```
@@ -144,7 +144,6 @@ head(retailClean)
 tail(retailClean)
 ```
 
-
 *Latihan*
 1. Gunakan fungsi filter untuk menyeleksi Country dari United Kingdom, dan simpan ke dalam objek CountryUK
 2. Gunakan fungsi filter untuk menyeleksi CustomerID = 168675, dan simpan ke dalam objek CusID168675
@@ -164,7 +163,7 @@ UK <- stockcode85123A %>%
 head(UK)
 ```
 ```{r}
-tail(stockcode85123A)
+tail(UK)
 
 ```
 
@@ -176,7 +175,7 @@ tail(stockcode85123A)
 
 ```{r}
 # your code
-
+ 
 
 
 ```
@@ -188,6 +187,12 @@ Fungsi `count()` digunakan untuk mengetahui jumlah data berdasarkan kategori/var
 ```{r}
 count(stockcode85123A, Country)
 ```
+
+```{r}
+count(stockcode85123A, Country) %>% 
+arrange(-n)
+```
+
 
 *Latihan*
 Gunakan fungsi `count` untuk menghitung jumlah:
@@ -215,6 +220,14 @@ stockcode85123A %>%
 Bisa kita lihat negara yang paling banyak melakukan transaksi adalah United Kingdom yaitu sebanyak 1097 kali
 
 
+```{r}
+stockcode85123A %>% 
+  group_by(Country, CustomerID, InvoiceDate) %>% 
+  count() %>% 
+  arrange(-n)
+```
+
+
 Sekarang kita akan hitung berapa jumlah transaksi berdasarkan StockCode, maka bisa kita tuliskan seperti ini.
 
 ```{r}
@@ -229,10 +242,12 @@ Transaksi yang paling banyak adalah untuk StockCode 85123A sebanyak 1131.
 Contoh lain, bagaimana kita menghitung jumlah transaksi berdasarkan InvoiceNo.
 
 ```{r}
-retailClean %>% 
-  group_by(InvoiceNo) %>% 
-  count() %>% 
-  arrange(-n)
+invoiceNoTrans <- retailClean %>% 
+  dplyr::group_by(InvoiceNo) %>% 
+  dplyr::count() %>% 
+  dplyr::arrange(-n)
+
+head(invoiceNoTrans)
 ```
 Bisa dilihat bahwa InvoiceNo 547063 berisi sebanyak 294 transaksi.
 
@@ -261,11 +276,11 @@ Fungsi `sample_n()` digunakan untuk mengambil secara acak data, artinya kita bis
 sample_n(UK, size = 10)
 ```
 *Latihan*
-1. Gunakan fungsi `sample_n()` untuk mengmabil 10 transaksi yang ada pada objek `retailClean`
-2. Gunakan fungsi `sample_n()` untuk mengmabil 5 transaksi yang ada pada objek `stockcode85123A`
+1. Gunakan fungsi `sample_n()` untuk mengambil 10 transaksi yang ada pada objek `retailClean`
+2. Gunakan fungsi `sample_n()` untuk mengambil 5 transaksi yang ada pada objek `stockcode85123A`
 ```{r}
 # your code
-sample_n(retailClean, size = 10)
+sample_n(retailClean, size = 100)
 
 
 ```
@@ -297,9 +312,14 @@ glimpse(stockcode85123A)
 
 ```{r}
 # your code
-
+tail(select(stockcode85123A, c(5,7)))
 
 ```
+
+```{r}
+
+```
+
 
 ### Summarise
 Fungsi `summarise()` digunakan untuk meringkas beberapa nilai data menjadi sebuah nilai. Dalam prakteknya fungsi ini akan sangat berguna kalau digabungkan dengan fungsi-fungsi yang lain. Sebagai contoh dalam kasus ini kita akan menampilkan jumlah traksaksi dari negara UK berdasarkan jumlah Quantity harian. Nilainya kita akan simpan pada objek *UK_daily_retail*
@@ -359,7 +379,7 @@ Misalkan kita diminta untuk memvisualisasi transaksi berdasarkan InvoiceDate dan
 ```{r}
 ggplot(stockcode85123A)+
   aes(x=InvoiceDate, y=Quantity) + 
-  geom_point (colour = "tomato3") +
+  geom_point (colour = "green") +
   labs( 
     title = "Transaksi Harian", 
     subtitle = "Stock Code 85123A", 
@@ -373,7 +393,7 @@ theme_minimal()
 ```{r}
 ggplot(stockcode85123A)+
   aes(x=InvoiceDate, y=Quantity) + 
-  geom_line (colour = "tomato3") +
+  geom_line (colour = "purple ") +
   labs( 
     title = "Transaksi Harian", 
     subtitle = "Stock Code 85123A", 
