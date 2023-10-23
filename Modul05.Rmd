@@ -11,21 +11,29 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Pengantar
 Analisis Prediktif bisa menggunakan dua metode yaitu;
+
 1. Classification: suatu bentuk dasar dari analisis data dimana datanya diklasifikasi ke dalam kelas-kelas.
+
 2. Regression: memprediksi nilai variabel numerik, misalnya angka pendapatan perusahaan atau angka penjualan.
 
 Untuk mendukung kedua hal tersebut, maka diperlukan **Machine Learning (ML)**, ML adalah tentang bagaimana membuat komputer belajar dan melakukan tugas dengan lebih baik berdasarkan data historis masa lalu. Pembelajaran selalu dilakukan berdasarkan pada observasi dari data yang tersedia. Ada dua jenis ML.
+
 1. Supervised Learning: yaitu mesin membuat model prediktif dengan bantuan sekumpulan data pelatihan (data training) atau sering disebut juga pembelajaran dengan pengawasan, karena variabel yang digunakan sudah ditentukan
+
 2. Unsupervised Learning: yaitu model prediktif yang tidak menggunakan data pelatihan (data training), tidak ada variabel target, sehingga sering disebut dengan pembelajaran tanpa pengawasan, karena variabel yang digunakan tidak ditentukan.
 
 Untuk menghasilkan model prediksi yang baik, sehingga dataset bisa dibagi menjadi 3 bagian, yaitu:
-a.	**Training Data Partition**: Partisi data pelatihan (data training) digunakan untuk melatih model. Rincian variabel hasil sudah diketahui. Untuk masalah klasifikasi, kelas variabel hasil sudah ditentukan dan terkadang dibuat secara manual dengan campur tangan manusia.
+
+a.	**Training Data Partition**: Partisi data pelatihan (data training) digunakan untuk melatih model. 
+Rincian variabel hasil sudah diketahui. Untuk masalah klasifikasi, kelas variabel hasil sudah ditentukan dan terkadang dibuat secara manual dengan campur tangan manusia.
+
 b.	**Test Data Partitions**: Partisi data pengujian (data testing) adalah bagian dari kumpulan data yang tidak ada dalam kumpulan pelatihan. Ini digunakan untuk menilai kinerja model untuk data baru. Partisi ini terkadang disebut partisi testing. Model harus bekerja dengan baik untuk data set pelatihan dan data pengujian.
+
 c.	**Validation Data Partition**: Partisi data validasi digunakan untuk menyempurnakan kinerja model dan mengurangi masalah overfitting. Partisi ini dapat digunakan untuk menilai beberapa model dan memilih model terbaik. Kumpulan data ini tidak digunakan untuk membangun model. Jadi, model tersebut belum pernah melihat kumpulan data ini sebelumnya. Ini membantu menyempurnakan kinerja model dan mengurangi overfitting.
 
 **Overfitting** adalah suatu keadaan dimana data yang digunakan untuk pelatihan itu adalah yang terbaik. Sehingga apabila dilakukan tes dengan menggunakan data yang berbeda dapat mengurangi akurasi (wikipedia)
 
-Pada pembahasan kali ini, kita akan membahas Klasifikasi, Klasifikasi adalah metode analisis data yang digunakan untuk menemukan pola dalam data. Klasifikasi memprediksi kelas kategorikal, sedangkan regresi memprediksi fungsi nilai kontinyu. Contoh penerapan model klasifikasi adalah untuk memprediksi hasil dari proses persetujuan aplikasi kartu kredit (disetujui atau ditolak) atau untuk menentukan klain asuransi. Ada banyak algoritma klasifikasi yang sudah dikembangkan dan dapat kita gunakan untuk menunjang prediksi yang akan dilakukan. Berikut algoritma klasifikasi yang bisa digunakan, diantaranya yaitu Naive Bayes, Decision Tree, K-Nearest Neighbor (KNN), Random Forest, dll. Dalam pembahasan pada Modul 07 ini, kita akan bahas bagaimana cara menggunakan Algoritma Desicion Tree dan Random Forest untuk memprediksi dan mengklasifikasi dataset *credit.csv*
+Pada pembahasan kali ini, kita akan membahas Klasifikasi, Klasifikasi adalah metode analisis data yang digunakan untuk menemukan pola dalam data. Klasifikasi memprediksi kelas kategorikal, sedangkan regresi memprediksi fungsi nilai kontinyu. Contoh penerapan model klasifikasi adalah untuk memprediksi hasil dari proses persetujuan aplikasi kartu kredit (disetujui atau ditolak) atau untuk menentukan klain asuransi. Ada banyak algoritma klasifikasi yang sudah dikembangkan dan dapat kita gunakan untuk menunjang prediksi yang akan dilakukan. Berikut algoritma klasifikasi yang bisa digunakan, diantaranya yaitu Naive Bayes, Decision Tree, K-Nearest Neighbor (KNN), Random Forest, dll. Dalam pembahasan pada Modul 05 ini, kita akan bahas bagaimana cara menggunakan Algoritma Desicion Tree dan Random Forest untuk memprediksi dan mengklasifikasi dataset *credit.csv*
 
 # Load Packages
 Untuk mendukung klasifikasi yang akan dilakukan, maka ada beberapa packages/library yang diperlukan.
