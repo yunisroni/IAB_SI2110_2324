@@ -63,6 +63,7 @@ Import data dan melihat struktur data
 credit <- read.csv("data/credit.csv")
 glimpse(credit)
 ```
+
 Melihat ringkasan dari data
 ```{r}
 summary(credit)
@@ -104,6 +105,13 @@ table(credit$housing)
 Ternyata housing terbanyak adalah untuk kategori own
 
 ```{r}
+# Melihat proporsi dari kategori housing
+prop.table(table(credit$housing))
+
+```
+
+
+```{r}
 # melihat kategori dari property
 table(credit$property)
 ```
@@ -112,7 +120,6 @@ table(credit$property)
 # Melihat kategori dari month_loan_duration dan purpose
 table(credit$months_loan_duration, credit$purpose)
 ```
-
 
 ```{r}
 # melihat kategori purpose
@@ -124,7 +131,18 @@ Bisa dilihat ada 10 kategori. Kategori yang paling banyak adalah radio/tv
 # melihat kategori dari foreign worker
 table(credit$foreign_worker)
 ```
-Ternyata katori untuk pekerja asing yang paling banyak yaitu sebanyak 963
+Ternyata kategori untuk pekerja asing yang paling banyak yaitu sebanyak 963
+
+*Latihan*
+Berapa banyak foreign_worker yang mengujukan credit (purpose) untuk Radio/TV?
+
+```{r}
+# Your Code
+
+
+
+```
+
 
 ```{r}
 # melihat kategori credit_history
@@ -140,6 +158,16 @@ table(credit$purpose, credit$credit_history)
 ```
 Ternyata bisa dilihat bahwa repaid dan untuk tujuan radio/tv adalah yang paling banyak yaitu sebanyak 167
 
+*Latihan*
+Lihatkan kategori dari variabel yang belum dijelaskan sebelumnya.
+
+```{r}
+# your code
+
+
+```
+
+
 kita akan filter, credit purpose = "radio/tv"
 ```{r}
 radiotv <- filter(credit, purpose == "radio/tv")
@@ -147,7 +175,9 @@ head(radiotv)
 ```
 Kita akan melihat berapa banyak pekerja asing yang mengajukan credit utk tujuan radio/tv
 
+
 ```{r}
+# Melihat berapa banyak pekerja asing yang mengajukan kredit untuk radio/tv
 radiotv %>% 
   group_by(foreign_worker) %>% 
   count() %>% 
@@ -170,7 +200,7 @@ Jenis pekerjaan yang paling banyak mengajukan credit utk radio/tv adalah *skille
 radiotv %>% 
   group_by(personal_status) %>% 
   count() %>% 
-  arrange(-n)
+  arrange(n)
   
 ```
 Jumlah pekerja dengan status *single male* ada sebanyak 146 orang
