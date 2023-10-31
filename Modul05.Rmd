@@ -237,8 +237,8 @@ set.seed(100) #pengambilan data secara random
 index_train <- createDataPartition(credit$foreign_worker,
                                    p = 0.7,list = FALSE)
 
-data.train <- credit[index_train,]
-data.test <- credit[-index_train,]
+data.train <- credit[index_train,] # 70% untuk data training
+data.test <- credit[-index_train,] # sisanya atau 30% untuk data testing
 ```
 
 ```{r}
@@ -288,7 +288,7 @@ Kurva ini digunakan untuk menilai hasil prediksi
 ngitungROCt <- rocit(score=prediksiTree[,2],class=data.test$foreign_worker)
 plot(ngitungROCt)
 ```
-Setelah didapatkan nilai curva, maka langkah selanjutnya adalah menghitung Area Under Curve (AUC) yang nantinya dijadikan sebagai dasarkan untuk menentukan ketepatan prediksi klasifikasi yang sudah lakukan. Nilai AUC bisa dikelompokkan atas:
+Setelah didapatkan nilai curva, maka langkah selanjutnya adalah menghitung Area Under Curve (AUC) yang nantinya dijadikan sebagai dasar untuk menentukan ketepatan prediksi klasifikasi yang sudah lakukan. Nilai AUC bisa dikelompokkan atas:
 a. 0.90 - 1.00 = Exellence Classification
 b. 0.80 - 0.90 = Good Classification
 c. 0.70 - 0.80 = Fair Classification
@@ -296,6 +296,11 @@ d. 0.60 - 0.70 = Poor Classification
 e. 0.50 - 0.60 = Failur
 
 Dalam banyak kasus, nilai AUC ini juga digunakan untuk mengukur perbedaan performansi metode klasifikasi.
+
+```{r}
+ngitungROCt
+```
+
 
 ```{r}
 # Menghitung Area Under Curve (AUC)
@@ -330,6 +335,7 @@ head(hasilPrediksi, n=10)
 ```{r} 
 plot(hasilPrediksi )
 ```
+
 ```{r}
 prediksi.status.f <- ifelse(hasilPrediksi[,2] > 0.5, "yes", "no")
 
@@ -344,6 +350,7 @@ Berdasarkan hasil diatas bisa lihat bahwa nilai akurasi sebesar 96,3 %
 ngitungROCf <- rocit(score=hasilPrediksi[,2],class=data.test$foreign_worker)
 plot(ngitungROCf)
 ```
+
 ```{r}
 AUCf <- ngitungROCf$AUC
 AUCf
