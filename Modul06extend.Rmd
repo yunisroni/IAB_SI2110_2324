@@ -1,0 +1,442 @@
+---
+title: "Modul 06 Extend - PCA dan K-Means"
+author: "Roni Yunis"
+date: "2023-11-20"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Principal Component Analysis (PCA)
+
+Principal Component Analysis (PCA) adalah teknik analisis statistik multivariat yang digunakan untuk merangkum data dalam jumlah variabel besar menjadi komponen utama yang lebih kecil. PCA umumnya digunakan dalam bidang pengenalan pola dan pemrosesan sinyal.
+
+Ada beberapa cara untuk menentukan berapa banyak komponen utama yang harus dipertahankan dalam PCA, termasuk kriteria apriori, kriteria nilai eigen, dan kriteria persentase varians.
+
+Cara kerja PCA melibatkan beberapa tahap utama, termasuk standarisasi data, perhitungan matriks kovarians, perhitungan nilai dan vektor eigen matriks kovarians, pemilihan komponen utama dengan nilai eigen yang signifikan, dan transformasi data ke dalam ruang komponen utama.
+
+PCA berguna saat Anda perlu mengurangi jumlah variabel dalam data, menguji ketergantungan antarvariabel, atau mengekstraksi hubungan antarvariabel. Namun, sebaiknya dihindari jika Anda membutuhkan interpretasi yang jelas dari variabel independen.
+
+Dalam rangka menginterpretasi data lebih cepat, PCA adalah alat yang efektif dalam analisis data multivariat.
+
+# Contoh Penerapan PCA dalam Segmentasi Pasar
+
+**Pernyataan Masalah:** Analisis Profil Pelanggan adalah analisis rinci mengenai pelanggan ideal suatu perusahaan. Ini membantu perusahaan memahami pelanggan mereka dengan lebih baik dan memudahkan mereka untuk mengubah atau menciptakan produk sesuai dengan kebutuhan, perilaku, dan perhatian khusus dari berbagai jenis pelanggan.
+
+Analisis profil pelanggan membantu perusahaan mengubah produknya berdasarkan pelanggan target dari berbagai segmen pelanggan. Sebagai contoh, daripada menghabiskan uang untuk memasarkan produk baru kepada setiap pelanggan dalam database perusahaan, perusahaan dapat menganalisis segmen pelanggan mana yang paling mungkin membeli produk tersebut, dan kemudian memasarkan produk hanya pada segmen tersebut. Dalam contoh ini, dataset yang akan digunakan adalah data marketing_campaign.csv
+
+```{r}
+# Library yang berisi kumpulan packages untuk analisis data
+library(tidyverse)
+
+```
+
+## Load Data
+```{r}
+customers <- read.csv("data/marketing_campaign.csv")
+head(customers)
+```
+
+## EDA dan Pre-Processing Data
+
+1. Melihat Struktur Data
+```{r}
+glimpse(customers)
+```
+
+```{r}
+summary(customers)
+```
+
+2. Melihat Data Kosong
+```{r}
+colSums(is.na(customers))
+```
+
+3. Menghapus Data NA's
+```{r}
+# Hapus data NA's
+customers <- na.omit(customers)
+colSums(is.na(customers))
+```
+
+4. Visualisasi Variabel dalam Data
+```{r}
+# Visualisasi Variabel dalam data
+plot_1 <- ggplot(customers, aes(x=Year_Birth, y=Income, group=Marital_Status, Color=Education)) +
+  geom_point() +
+  labs(title = "Jumlah Pendapatan", x = "Tahun Lahir", y = "Pendapatan") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(legend.position = "right")
+plot_1
+```
+
+5. Merubah Type Data dan Manipulasi Data
+```{r}
+# Merubah type data Dt_customer
+customers <- customers %>% 
+  mutate(Dt_Customer = as.Date(dmy(Dt_Customer)))
+glimpse(customers)
+```
+
+```{r}
+# Membuat variabel Age dari Year of Birth
+customers <- customers %>% 
+  mutate(Age = 2023 - Year_Birth)
+
+glimpse(customers)
+
+```
+
+```{r}
+customers %>% 
+  select(Age) %>% 
+  arrange(desc(Age)) %>% 
+  top_n(5)
+
+```
+Ada umur yang diatas 100, ini merupakan data _outlier_ yang dipastikan produk yang akan dipasarkan tidak sesuai dengan umur tersebut.
+
+
+```{r}
+# Hapus data outlier
+customers <- customers %>% 
+  filter(Income < 600000 & Age < 90)
+dim(customers)
+```
+
+```{r}
+glimpse(customers)
+```
+
+```{r}
+head(customers$Education)
+```
+
+```{r}
+head(customers$Marital_Status)
+```
+
+```{r}
+unique(customers$Marital_Status)
+```
+Kita jadikan Marital_status ini menjadi 2 kategori saja, yaitu Single dan Taken
+Single: Divorced, Widow, Alone, Absurd, Yolo
+Taken: Together, Married
+
+```{r}
+customers <- customers %>% 
+  mutate(Marital_Status = replace(Marital_Status, Marital_Status == "Divorced" | Marital_Status == "Widow" | Marital_Status == "Alone" | Marital_Status == "Absurd" | Marital_Status == "YOLO", "Single"))
+
+```
+
+```{r}
+customers <- customers %>% 
+  mutate (Marital_Status = replace(Marital_Status, Marital_Status == "Together" | Marital_Status == "Married", "Taken"))
+
+```
+
+```{r}
+glimpse(customers)
+```
+*Latihan*
+Rubahkan atau eksrak data Education menjadi 2 kategori Graduate dan Non-graduate
+
+```{r}
+unique(customers$Education)
+```
+
+graduate : Graduation, PHD, Master
+non-graduate : Basic, 2n Cycle
+
+```{r}
+#your code
+customers <- customers %>% mutate(Education = replace(Education, Education == "Graduation"| Education == "PhD" | Education == "Master", "graduate"))
+customers <- customers %>% mutate(Education = replace(Education, Education == "Basic"| Education == "2n Cycle", "non-graduate"))
+
+```
+
+```{r}
+glimpse(customers)
+```
+
+```{r}
+unique(customers$Education)
+```
+
+
+```{r}
+# Merubah nama produk 
+customers <- customers %>% 
+  rename(wines = MntWines, fruits = MntFruits, meat = MntMeatProducts, fish = MntFishProducts, sweet = MntSweetProducts, gold = MntGoldProds)
+glimpse(customers)
+```
+
+```{r}
+# Buat variabel baru untuk Total_spent dari produk
+customers <- customers %>% 
+  mutate(Total_spent = wines + fruits + meat + fish + sweet + gold)
+glimpse(customers)
+```
+
+Membuang variabel  data yang redundant atau data yang sama muncul berulang-ulang
+```{r}
+# Menghapus variabeld dengan data berulang/redundant
+customers <- customers %>% 
+  select(- ID, - Year_Birth, - Dt_Customer, - Z_CostContact, - Z_Revenue)
+glimpse(customers)
+
+```
+
+```{r}
+head(customers)
+```
+
+Melihat Korelasi atau hubungan antara variabel yang dalam data
+```{r}
+library(corrplot)
+
+# Membuat korelasi dengan matrik
+cust_cor <- cor(customers[,3:17])
+corrplot(cust_cor, method = "color", addCoef.col = "white")
+```
+Membuat kopian data untuk kategori fitur dan standarisasi dari data
+
+```{r}
+customers_copy <- customers
+
+# Merubah ketegori ke dalam numerik
+customers_copy <- customers_copy %>% mutate(Education = case_when(Education == "graduate" ~ 1,
+                                                        Education == "non-graduate" ~ 0))
+customers_copy <- customers_copy %>% mutate(Marital_Status = case_when(Marital_Status == "Taken" ~ 1,
+                                                             Marital_Status == "Single" ~ 0))
+
+str(customers_copy$Education)
+str(customers_copy$Marital_Status)
+```
+
+```{r}
+glimpse(customers_copy)
+```
+
+
+
+```{r}
+#Standarisasi
+library(caret)
+
+#Pre-Processing Data
+customers_copy_pre <- preProcess(customers_copy[,c(3, 6:17, 25:26)], method = c("center", "scale"))
+
+#Normalisasi 
+customers_copy <- predict(customers_copy_pre, customers_copy[, c(3, 6:17, 25:26)])
+summary(customers_copy)
+```
+
+
+## Principal Component Analysis (PCA)
+
+Pengurangan dimensi memiliki dua tujuan utama: untuk menemukan struktur dalam fitur dan membantu dalam visualisasi. Salah satu metode pengurangan dimensi tertentu dan populer adalah analisis komponen utama (PCA).
+
+PCA memiliki 3 tujuan:
+
+1. PCA akan menemukan kombinasi linear dari fitur asli.
+
+2. Menjaga sebagian besar varian dalam data.
+
+3. Komponen utama tidak berkorelasi (artinya bersifat ortogonal satu sama lain).
+
+Dalam kasus ini PCA akan menggunakan `library(FactoMineR)`
+
+Kita akan menggunakan paket FactoMineR, yang menyediakan koleksi metode ekstraksi/estimasi yang paling lengkap untuk PCA.
+
+```{r}
+library(FactoMineR)
+
+#Menjalankan PCA.
+customers_copy_pca <- PCA(customers_copy, graph = FALSE)
+
+#Ekplorasi PCA()
+
+#Mendapatkan ringkasan PCA
+summary(customers_copy_pca)
+
+#Mendapatkan varian dari 7 dimensi baru pertama
+customers_copy_pca$eig[,2][1:7]
+
+#Mendapatkan kumulatif varian
+customers_copy_pca$eig[,3][1:7]
+
+#Mendapatkan variabel yang berkorelasi
+dimdesc(customers_copy_pca, axes = 1:2)
+
+
+#Melacak kontribusi variabel
+customers_copy_pca$var$contrib
+```
+
+
+```{r}
+#Visualisasi PCA
+library(factoextra)
+
+#Membuat peta factor untuk kontribusi variabel
+fviz_pca_var(customers_copy_pca, col.var = "contrib", gradient.cols = c("#002bbb", "#bb2e00"), repel = TRUE)
+```
+```{r}
+#Membuat peta factor untuk 5 variabel dengan kontribusi tertinggi.
+fviz_pca_var(customers_copy_pca, select.var = list(contrib = 5), repel = TRUE)
+
+```
+
+```{r}
+#Visualisasi kontribusi dari variabel
+fviz_contrib(customers_copy_pca, choice = "var", axes = 1, top = 5)
+```
+Keterangan: Garis merah mengacu pada persentase yang diharapkan jika distribusi tersebut merata
+
+```{r}
+#Visualisasi untuk semua hubungan antar variabel
+fviz_pca_biplot(customers_copy_pca)
+```
+
+
+# Klustering
+
+Implementasi Klustering dengan K-Means Clustering. Algoritma k-means adalah salah satu pendekatan umum dalam pengelompokan data. Kita akan menerapkan pengelompokan k-means, visualisasikan, dan interpretasikan hasilnya. Tetapi sebelumnya, kita akan menerapkan metode-metode yang berbeda yang mengatasi tantangan dalam memperkirakan k secara empiris dari data. Metode-metode ini mencakup:
+
+1. **Elbow Method** - metode yang digunakan untuk membantu menentukan jumlah kluster optimal dalam algoritma pengelompokan, seperti k-means.
+
+2. **Analisis Siluet** -  membantu dalam mengevaluasi apakah pengelompokan yang telah dilakukan adalah pengelompokan yang sesuai atau apakah ada tanda-tanda ketidakcocokan dalam pengelompokan data. Nilai Silhouette berkisar dari -1 hingga 1, dan semakin tinggi nilainya, semakin baik pengelompokan tersebut.
+
+## Elbow Method
+
+```{r}
+#Library untuk Elbow Method
+library(purrr)
+
+tot_withinss <- map_dbl(1:10, function(k){
+  model <- kmeans(x = customers_copy, centers = k)
+  model$tot.withinss
+})
+
+elbow_df <- data.frame(
+       k = 1:10,
+       tot_withinss = tot_withinss)
+head(elbow_df)
+ 
+#plotting the elbow plot
+ggplot(elbow_df, aes(k, tot_withinss)) + geom_line() + scale_x_continuous(breaks = 1:10)
+```
+Keterangan: Melihat penurunan tajam dari satu ke yang lain, diikuti oleh penuruan yang lebih lambat dalam bentuk. Maka dari hasil diatas bisa dilihat bahwa nilai yang baik dari k adalah 2.
+
+## Silhouette Analysis (Analisis Siluet)
+
+Metode ini memberikan sudut pandang yang berbeda untuk memahami hasil analisis pengelompokan data. Ini dapat digunakan untuk menentukan seberapa baik setiap observasi yang cocok dengan kelompoknya masing-masing dan dapat digunakan sebagai metode tambahan untuk memperkirakan nilai k.
+
+```{r}
+#Library untuk Silhoutte Analysis dan K-Means
+#library(cluster)
+
+sil_width <- map_dbl(2:10, function(k){
+    model <- pam(customers_copy, k = k)
+    model$silinfo$avg.width
+})
+sil_df <- data.frame(
+    k = 2:10,
+    sil_width = sil_width
+)
+
+head(sil_df)
+ggplot(sil_df, aes(k, sil_width)) + geom_line() + scale_x_continuous(breaks = 2:10) + labs(y = "Avg sil width")
+```
+Keterangan: Lebar siluet rata-rata maksimum adalah untuk k sebesar 2, yang memiliki nilai lebih besar dari nol dan mendekati 1, menunjukkan bahwa observasi cocok dengan baik dengan kluster yang ditugaskan.
+
+## K-Means Clustering
+
+```{r}
+set.seed(42)
+
+#Membangun model k-means dengan k sebanyak 2
+customers_md <- kmeans(customers_copy, center = 2)
+
+#Mengekstrak vektor dari kluster dalam model k-means
+clust_customers <- customers_md$cluster
+
+#Membangun kerangka data segment_customers
+segment_customers <- mutate(customers_copy, cluster = clust_customers)
+
+#Menghitung rata-rata untuk setiap kategori
+count(segment_customers, cluster)
+
+
+#Menambahkan variabel kluster ke dalam kerangka data asli
+customers <- customers %>% mutate(cluster = segment_customers$cluster)
+head(customers, n = 4)
+
+#Melihat jumlah kluster dalam data asli
+count(customers, cluster)
+
+```
+Visualisasi 5 variabel yang berkontribusi tinggi dalam kluster yang sudah terbentuk
+
+```{r}
+#visualizing wines
+customers %>% ggplot(aes(wines)) + geom_histogram(color = "black", fill = "lightblue") + facet_wrap(vars(cluster)) 
+
+#visualizing Income variable
+customers %>% ggplot(aes(Income)) + geom_histogram(color = "black", fill = "lightgreen") + facet_wrap(vars(cluster)) +  geom_vline(aes(xintercept=mean(Income)),color="blue", linetype="dashed", size = 1)
+
+#visualizing Total_spent
+customers %>% ggplot(aes(Total_spent)) + geom_histogram(color = "black", fill = "purple") + facet_wrap(vars(cluster))
+
+#visualizing NumCatalogPurchases
+customers %>% ggplot(aes(NumCatalogPurchases)) + geom_histogram(color = "black", fill = "orange") + facet_wrap(vars(cluster)) 
+
+#visualizing meat variable
+customers %>% ggplot(aes(meat)) + geom_histogram(color = "black", fill = "brown") + facet_wrap(vars(cluster))
+```
+
+# Interpretasi Hasil (Kesimpulan)
+
+1. Berdasarkan hasil PCA didapat 5 variabel yang berkontribusi tinggi yaitu variabel: wines, income, total_spent, numcatalogpurchase, dan meat.
+
+2. Bardasarkan hasil klustering dengan K-Means didapatkan bahwa:
+
+**Kluster 1:**
+
+- Kluster pelanggan ini memiliki daya beli rendah dalam hal pembelian anggur; dengan sebagian besar dari mereka sama sekali tidak membeli item ini.
+
+- Memiliki pendapatan yang relatif lebih rendah dibandingkan dengan kluster lain, dengan sebagian besar pendapatan pelanggan berada di bawah rata-rata pendapatan.
+
+- Total pengeluaran lebih rendah.
+
+- Sebagian besar pelanggan tidak memiliki pembelian katalog.
+
+- Sebagian besar pelanggan tidak memiliki pembelian daging.
+
+
+**Kluster 2:**
+
+- Kelompok ini memiliki daya beli yang tinggi dalam hal pembelian anggur dibandingkan dengan kelompok 1.
+
+- Pendapatan yang relatif lebih tinggi dengan sebagian besar pendapatan pelanggan berada di atas rata-rata pendapatan.
+
+- Total pengeluaran yang relatif lebih tinggi, dengan sebagian besar pengeluaran melampaui 1000.
+
+- Memiliki jumlah pembelian katalog yang lebih banyak.
+
+- Membeli lebih banyak daging dibandingkan dengan kelompok 1.
+
+
+*Latihan*
+Lakukan penentuan untuk semua variabel atau 26 variabel ke dalam PCA, tentukan 8 veriabel yg penting dan kemudian lakukan kembali klustering.
+
+```{r}
+# your code
+
+
+
+```
+

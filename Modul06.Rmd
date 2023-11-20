@@ -1,5 +1,5 @@
 ---
-title: "Modul 07 - Clustering"
+title: "Modul 06 - Clustering"
 author: "Roni Yunis"
 date: "11/20/2023"
 output: pdf_document
@@ -10,6 +10,7 @@ output: pdf_document
 **K-Means Clustering** adalah algoritma *Unsupervised Learning* yang mencoba mengelompokkan data berdasarkan kesamaannya. *Unsupervised Learning* berarti tidak ada hasil untuk diprediksi, dan algoritma hanya mencoba menemukan pola dalam data. Dalam K-Means clustering, kita telah menentukan jumlah cluster yang kita ingin datanya dikelompokkan. Algoritma secara acak menetapkan setiap observasi ke cluster, dan menemukan pusat data dari setiap cluster. Kemudian, algoritma melakukan iterasi melalui dua langkah:
 
 1. Tetapkan ulang titik data ke cluster yang sentroidnya paling dekat.
+
 2. Hitung sentroid baru dari setiap cluster.
 
 Kedua langkah ini diulangi sampai variasi cluster sehingga tidak dapat dikurangi lebih jauh. Variasi dalam cluster dihitung sebagai jumlah dari jarak Euclid (Euclidean) antara titik data dan sentroid cluster masing-masing.
