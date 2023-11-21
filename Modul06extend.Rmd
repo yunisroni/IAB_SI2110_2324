@@ -164,6 +164,9 @@ glimpse(customers)
 ```{r}
 unique(customers$Education)
 ```
+```{r}
+unique(customers$Marital_Status)
+```
 
 
 ```{r}
@@ -199,7 +202,7 @@ library(corrplot)
 
 # Membuat korelasi dengan matrik
 cust_cor <- cor(customers[,3:17])
-corrplot(cust_cor, method = "color", addCoef.col = "white")
+corrplot(cust_cor, method = "color", addCoef.col = "red")
 ```
 Membuat kopian data untuk kategori fitur dan standarisasi dari data
 
@@ -376,7 +379,7 @@ customers <- customers %>% mutate(cluster = segment_customers$cluster)
 head(customers, n = 4)
 
 #Melihat jumlah kluster dalam data asli
-count(customers, cluster)
+ count(customers, cluster)
 
 ```
 Visualisasi 5 variabel yang berkontribusi tinggi dalam kluster yang sudah terbentuk
