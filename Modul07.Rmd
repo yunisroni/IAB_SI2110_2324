@@ -1,13 +1,7 @@
 ---
 title: "Modul 08 - Association Rules"
 author: "Roni Yunis"
-date: "11/20/2022"
-output:
-  html_document:
-    df_print: paged
-editor_options:
-  markdown:
-    wrap: 72
+date: "11/27/2023"
 ---
 
 # Pengantar
@@ -316,9 +310,7 @@ banyak barang yang dibeli setiap transaksi ?
 
 ```{r}
 # your code
-# berapa banyak barang yang dibeli oleh pelanggan
-retail_clean %>% 
-  count(InvoiceNo, name = "freq", sort = TRUE)
+
 
 ```
 
