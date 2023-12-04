@@ -110,11 +110,11 @@ lm.r <- lm(sales ~ facebook,
 summary(lm.r)
 ```
 Berdasarkan output diatas bisa dijelaskan bahwa:
-Persamaan regresi linernya adalah $sales = 11.41 + 0.192*facebook$
+Persamaan regresi linernya adalah $sales = 11.90 + 0.172*facebook$
 
 Misal facebook = 3500
 ```{r}
-sales = 10.85 + 0.216*3500
+sales = 11.90 + 0.172*3500
 sales
 ```
 
