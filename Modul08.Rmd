@@ -387,4 +387,4 @@ model_performance
   
 ```
 
-**Kesimpulan**: Berdasarkan 3 variabel prediktor yaitu facebook, youtube, dan newspaper yang paling berpengaruh terhadap peningkatakn penjualan adalah variabel youtube. Hal ini bisa dijelaskan dari nilai evaluasi SSE dan MSE bahwa model youtube dan sales lebih kecil dan RSquare lebih besar dibandingkan dengan model regresi dari 2 variabel lainnya.
+**Kesimpulan**: Berdasarkan 3 variabel prediktor yaitu facebook, youtube, dan newspaper yang paling berpengaruh terhadap peningkatakn penjualan adalah variabel youtube. Hal ini bisa dijelaskan dari nilai evaluasi SSE dan MSE bahwa model youtube lebih kecil dan RSquare lebih besar dibandingkan dengan model regresi dari 2 variabel lainnya.
