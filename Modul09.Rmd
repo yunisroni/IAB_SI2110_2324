@@ -358,7 +358,7 @@ Fit Model 2
 model_glm_2 <- glm(sales ~ youtube + facebook + newspaper, data = trainingset, 
                  family = gaussian(link = "identity"), # distribusi probabilitas dari variabel respons
                  control = list(epsilon = 1e-8, # nilai batasan toleransi kesalahan (0.00000001)
-                                maxit =1000)     # jumlah iterasi 500 kali
+                                maxit =500)     # jumlah iterasi 500 kali
                  )
 
 # melihat hasil model prediksi
