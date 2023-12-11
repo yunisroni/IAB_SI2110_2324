@@ -53,6 +53,12 @@ library(dplyr)
 
 ```
 
+```{r}
+marketing
+```
+
+
+
 ## View dataset
 ```{r}
 head(marketing)
@@ -121,19 +127,21 @@ lm.r <- lm(sales ~ facebook,
            data = trainingset)
 summary(lm.r)
 ```
-$$Sales = 10.93519 + 0.21232.facebook + \varepsilon$$ 
+Nilai P-Value = 0.00000000000000057
 
 
 
+
+$$Sales = 10.89708 + 0.21956.facebook + \varepsilon$$ 
 
 Misalnya facebooknya Rp. 3500, berapakah nilai penjualan (sales)?
 Persamaan regresi linernya adalah:
 
-$$Sales = 10.93519 + 0.21232 * 3500 + \varepsilon$$ 
+$$Sales = 10.89708 + (0.21956 * 3500) + \varepsilon$$ 
 
 ```{r}
-sales = 10.93519 + (0.21232*3500)
-sales
+sales_f = 10.89708 + (0.21956 * 3500)
+sales_f
 ```
 Kalau kita lihat dari model diatas bahwa facebook punya hubungan signifikan terhadap penjualan, artinya nilai penjualan dapat ditingkatkan dari anggaran iklan pada facebook. 
 
@@ -149,7 +157,7 @@ head(yprediksi)
 ggplot() + geom_point(aes(x = trainingset$facebook,
                           y = trainingset$sales), colour = 'red') +
   geom_line(aes(x = trainingset$facebook,
-                y = predict(lm.r, newdata = trainingset)), colour = 'blue') +
+                y = predict( lm.r, newdata = trainingset)), colour = 'blue') +
   ggtitle('Pengaruh Facebook terhadap Sales (Data Training)') +
   xlab('facebook') +
   ylab('sales')
@@ -178,8 +186,8 @@ Dalam R, Anda dapat mengakses SSE langsung dari objek model regresi menggunakan 
 
 ```{r}
 # Menghitung SSE
-sse <- sum(lm.r$residuals^2)
-cat("Sum of Squared Errors (SSE):", sse, "\n")
+sse_f <- sum(lm.r$residuals^2)
+cat("Sum of Squared Errors (SSE):", sse_f, "\n")
 
 ```
 **R-Squared**, Nilai R-squared mengindikasikan seberapa besar variasi dalam variabel terikat yang dapat dijelaskan oleh model. Nilai R-squared berkisar antara 0 (model tidak menjelaskan variasi sama sekali) hingga 1 (model menjelaskan seluruh variasi). Anda dapat menghitung R-squared (koefisien determinasi) dari model regresi linear sederhana menggunakan fungsi `summary()` pada objek model
@@ -187,8 +195,8 @@ cat("Sum of Squared Errors (SSE):", sse, "\n")
 ```{r}
 # Mengitung R-Square
 model.summary <- summary(lm.r)
-r_squared <- model.summary$r.squared
-cat("R-squared:", r_squared, "\n")
+r_squared_f <- model.summary$r.squared
+cat("R-squared:", r_squared_f, "\n")
 ```
 **Mean Squared Error (MSE)** Menghitung MSE dapat memberikan gambaran tentang seberapa baik model dapat menjelaskan variasi dalam data. Semakin rendah MSE dan semakin tinggi $R^2$, semakin baik modelnya.
 
@@ -232,12 +240,12 @@ summary(lm.y)
 Berdasarkan output diatas bisa dijelaskan bahwa:
 Persamaan regresi linernya adalah
 
-$$sales = 8.175714 + 0.050387*youtube$$
+$$sales = 8.215839 + 0.049680*youtube$$
 
 Misal youtube = 3500
 
 ```{r}
-sales.y = 8.175714 + 0.050387*3500
+sales.y = 8.215839 + (0.049680*3500)
 sales.y
 ```
 
@@ -317,12 +325,12 @@ lm.n <- lm(sales ~ newspaper,
 summary(lm.n)
 
 ```
-$$Sales = 15.09358 + 0.05201 * newspaper + \varepsilon$$
+$$Sales = 14.44853 + 0.07067 * newspaper + \varepsilon$$
 Misal nilai newspapernya: 3500
 maka nilai:
 
 ```{r}
-sales_n = 15.09358 + (0.05201 * 3500)
+sales_n = 14.44853 + (0.07067 * 3500)
 sales_n
 ```
 ## Visualasi hasil data training newspaper
@@ -361,7 +369,7 @@ cat("Sum of Squared Errors (SSE)", sse_n, "\n")
 ```
 ```{r}
 # Evalusasi RSquare newpaper terhadap sales
-model.summary_n <- summary(lm.n)
+model.summary_n = summary(lm.n)
 r_squared_n <- model.summary_n$r.squared
 cat("R-squared:", r_squared_n, "\n")
 
