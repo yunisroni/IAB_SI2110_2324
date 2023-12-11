@@ -202,21 +202,35 @@ Jadi bisa dilihat bahwa tingkat kesalahan (error rate) dari model yang sudah dih
 Dari model regresi yang sudah kita bahas sebelumnya, kelihatan bahwa hanya 2 variabel yang berpengaruh pada penjualan. Variabel yang tidak berpengaruh adalah variabel *newspaper*, sekarang coba Anda buktikan kalau hanya ada satu varibel yaitu *newspaper* saja apakah benar-benar tidak berpengaruh pada nilai penjualan?
 
 $$sales = b0 + b1*newspaper$$ 
-
-
 ```{r}
-# your code
+# pangaruh newspaper terhadap sales
 
-
+liner_3 <- lm(sales ~ newspaper, data = marketing)
+summary(liner_3)
 
 ```
+Interpretasi: variabel newspaper berpengaruh positif dan signifikan terhadap sales, tapi pengaruhnya tidak besar atau relatif kecil, karena nilai R-square = 0.05212
+
 
 Jika nilai iklan di newspaper 1000, maka berapa nilai penjualan (sales)?
 
+$$sales = 14.82169 + (0.05469*newspaper)$$
+$$sales = 14.82169 + (0.05469*1000)$$
+```{r}
+sales_newspaper = 14.82169 + (0.05469*1000)
+sales_newspaper
+```
+```{r}
+sales_yf = 3.505 + (0.046*1000) + (0.188*1000)
+sales_yf
+```
+
+
 # Model Regresi dengan Model GLM (Generalized Linear Model)
+
 ## Bagi dataset kedalam data training dan data testing
 ```{r}
-splitdata <- sample.split(marketing$sales, SplitRatio = 0.7)
+splitdata <- sample.split(marketing$sales, SplitRatio = 0.7) # 70% untuk data training, sisanya data testing
 trainingset <- subset(marketing, splitdata == TRUE)
 testingset <- subset(marketing, splitdata == FALSE)
 ```
@@ -227,37 +241,42 @@ dim(testingset)
 ```
 
 ## Model Regresi
+Fit Model 1
 ```{r}
 # library model GLM
 library(glm2)
 
 # model GLM untuk memprediksi variabel sales pada data training
-model_glm <- glm(sales ~ youtube + facebook + newspaper, data = trainingset, 
+model_glm_1 <- glm(sales ~ youtube + facebook + newspaper, data = trainingset, 
                  family = gaussian(link = "identity"), # distribusi probabilitas dari variabel respons
-                 control = list(epsilon = 1e-8, # nilai batasan toleransi kesalahan
+                 control = list(epsilon = 1e-8, # nilai batasan toleransi kesalahan (0.00000001)
                                 maxit =100)     # jumlah iterasi
                  )
 
 # melihat hasil model prediksi
-summary(model_glm)
+summary(model_glm_1)
 ```
 
 **Latihan**
-Coba diidentifikasi jenis family secara umum dalam GLM
+Coba diidentifikasi jenis family secara umum dalam GLM?, kemudian coba implementasikan ke dalam model. Kalau bisa anda bandingkan hasilnya. Model dengan hyperparameter mana yang paling baik?
+
 
 ## Prediksi data testing dengan model
 ```{r}
 # Melakukan prediksi produksi dengan model GLM pada data testing
-predicted_glm <- predict(model_glm, newdata = testingset, type = "response")
+predicted_glm_1 <- predict(model_glm_1, newdata = testingset, type = "response")
 
 # Menampilkan hasil prediksi
-head(predicted_glm)
+head(predicted_glm_1)
+```
+```{r}
+head(testingset$sales)
 ```
 
 ## Visualisasi Hasil Prediksi
 ```{r}
 # Visualisasi Hasil
-result_data_glm <- data.frame(sales = testingset$sales, Predictions = predicted_glm)
+result_data_glm <- data.frame(sales = testingset$sales, Predictions = predicted_glm_1)
 
 # Visualisasi Perbandingan Produksi Aktual dengan Hasil Prediksi
 ggplot(data = result_data_glm, aes(x = sales, y = Predictions)) +
@@ -280,6 +299,31 @@ ggplot(data = result_data_glm, aes(x = 1:length(sales))) +
   ggtitle("Comparison of Actual Sales and GLM Model Prediction") +
   theme_minimal()
 ```
+Konsep Evaluasi Model dengan Metrik Perfomansi Model: MAE, MSE, RMSE, dan MAPE:
+
+1. **Mean Absolute Error (MAE):**
+   
+   $$MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i| $$
+   
+   Rata-rata dari nilai absolut dari selisih antara nilai sebenarnya $y_i$ dan nilai prediksi $\hat{y}_i$. MAE memberikan gambaran tentang seberapa besar kesalahan prediksi rata-rata dalam skala asli.
+
+2. **Mean Squared Error (MSE):**
+    $$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
+   
+   Rata-rata dari kuadrat selisih antara nilai sebenarnya $y_i$ dan nilai prediksi $\hat{y}_i$. MSE memberikan lebih banyak bobot pada kesalahan besar.
+
+3. **Mean Absolute Percentage Error (MAPE):**
+   $$MAPE = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{|y_i - \hat{y}_i|}{|y_i|} \right) \times 100\%$$
+   
+   Rata-rata persentase dari nilai absolut dari selisih antara nilai sebenarnya $y_i$ dan nilai prediksi $\hat{y}_i$, dinormalkan dengan nilai sebenarnya. MAPE memberikan indikasi kesalahan relatif dalam persentase.
+
+4. **Root Mean Squared Error (RMSE):**
+   $$RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}$$
+   
+   Akar kuadrat dari MSE. RMSE memberikan ukuran kesalahan yang serupa dengan MAE tetapi memberikan bobot lebih besar pada kesalahan yang lebih besar.
+
+Pilihan metrik tergantung pada konteks dan preferensi spesifik. MAE, MSE, dan RMSE mengukur kesalahan dalam skala asli, sementara MAPE memberikan pengukuran kesalahan relatif dalam persentase. Dalam beberapa kasus, Anda mungkin perlu mempertimbangkan karakteristik spesifik dari masalah regresi yang sedang dihadapi untuk memilih metrik yang sesuai. Pemilihan metrik performansi tergantung pada tipe masalah dan tujuan spesifik dari model prediksi yang sedang dievaluasi.
+
 
 ## Evaluasi Model
 ```{r}
@@ -287,22 +331,93 @@ ggplot(data = result_data_glm, aes(x = 1:length(sales))) +
 library(Metrics)
 
 
-# Hitung MAE
-mae_value_glm <- mae(testingset$sales, predicted_glm)
+# Hitung MAE (Mean Absolute Error)
+mae_value_glm_1 <- mae(testingset$sales, predicted_glm_1)
 
-# Hitung MSE
-mse_value_glm <- mse(testingset$sales, predicted_glm)
+# Hitung MSE (Mean Squared Error)
+mse_value_glm_1 <- mse(testingset$sales, predicted_glm_1)
 
-# Hitung RMSE
-rmse_value_glm <- rmse(testingset$sales, predicted_glm)
+# Hitung RMSE (Root Mean Square Error)
+rmse_value_glm_1 <- rmse(testingset$sales, predicted_glm_1)
 
-# Hitung MAPE
-mape_value_glm <- mape(testingset$sales, predicted_glm)
+# Hitung MAPE (Mean Absolute Percent Error)
+mape_value_glm_1 <- mape(testingset$sales, predicted_glm_1)
 
 # Tampilkan hasil evaluasi
-cat(paste("MAE: ", mae_value_glm, "\n"))
-cat(paste("MSE: ", mse_value_glm, "\n"))
-cat(paste("RMSE: ", rmse_value_glm, "\n"))
-cat(paste("MAPE: ", mape_value_glm, "%\n"))
+cat(paste("MAE: ", mae_value_glm_1, "\n"))
+cat(paste("MSE: ", mse_value_glm_1, "\n"))
+cat(paste("RMSE: ", rmse_value_glm_1, "\n"))
+cat(paste("MAPE: ", mape_value_glm_1, "%\n"))
 ```
+Fit Model 2
+```{r}
+# library model GLM
+#library(glm2)
+
+# model GLM untuk memprediksi variabel sales pada data training
+model_glm_2 <- glm(sales ~ youtube + facebook + newspaper, data = trainingset, 
+                 family = gaussian(link = "identity"), # distribusi probabilitas dari variabel respons
+                 control = list(epsilon = 1e-8, # nilai batasan toleransi kesalahan (0.00000001)
+                                maxit =1000)     # jumlah iterasi 500 kali
+                 )
+
+# melihat hasil model prediksi
+summary(model_glm_2)
+```
+```{r}
+# Melakukan prediksi produksi dengan model GLM pada data testing
+predicted_glm_2 <- predict(model_glm_2, newdata = testingset, type = "response")
+
+# Menampilkan hasil prediksi
+head(predicted_glm_2)
+```
+```{r}
+# Visualisasi Hasil
+result_data_glm_2 <- data.frame(sales = testingset$sales, Predictions = predicted_glm_2)
+
+# Visualisasi Perbandingan Produksi Aktual dengan Hasil Prediksi
+ggplot(data = result_data_glm_2, aes(x = sales, y = Predictions)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = "Actual Sales", y = "Predicted Sales") +
+  ggtitle("Comparison of Actual Sales and GLM Model Prediction") +
+  theme_minimal()
+```
+```{r}
+# Visualisasi Produksi Aktual dengan Hasil Prediksi
+ggplot(data = result_data_glm_2, aes(x = 1:length(sales))) +
+  geom_line(aes(y = sales, color = "Actual"), size = 1) +
+  geom_line(aes(y = Predictions, color = "GLM Prediction"), size = 1) +
+  labs(x = "Observation", y = "Sales") +
+  scale_color_manual(values = c("Actual" = "blue", "GLM Prediction" = "red")) +
+  ggtitle("Comparison of Actual Sales and GLM Model Prediction") +
+  theme_minimal()
+```
+
+```{r}
+# Evaluasi GLM Model
+#library(Metrics)
+
+
+# Hitung MAE (Mean Absolute Error)
+mae_value_glm_2 <- mae(testingset$sales, predicted_glm_2)
+
+# Hitung MSE (Mean Squared Error)
+mse_value_glm_2 <- mse(testingset$sales, predicted_glm_2)
+
+# Hitung RMSE (Root Mean Square Error)
+rmse_value_glm_2 <- rmse(testingset$sales, predicted_glm_2)
+
+# Hitung MAPE (Mean Absolute Percent Error)
+mape_value_glm_2 <- mape(testingset$sales, predicted_glm_2)
+
+# Tampilkan hasil evaluasi
+cat(paste("MAE: ", mae_value_glm_2, "\n"))
+cat(paste("MSE: ", mse_value_glm_2, "\n"))
+cat(paste("RMSE: ", rmse_value_glm_2, "\n"))
+cat(paste("MAPE: ", mape_value_glm_2, "%\n"))
+```
+
 
