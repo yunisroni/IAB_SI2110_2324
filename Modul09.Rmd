@@ -48,6 +48,8 @@ Kita akan melihat ringkasan data dari dataset marketing
 ```{r}
 glimpse(marketing)
 ```
+
+
 ```{r}
 summary(marketing)
 ```
@@ -269,6 +271,8 @@ predicted_glm_1 <- predict(model_glm_1, newdata = testingset, type = "response")
 # Menampilkan hasil prediksi
 head(predicted_glm_1)
 ```
+
+
 ```{r}
 head(testingset$sales)
 ```
@@ -349,6 +353,8 @@ cat(paste("MSE: ", mse_value_glm_1, "\n"))
 cat(paste("RMSE: ", rmse_value_glm_1, "\n"))
 cat(paste("MAPE: ", mape_value_glm_1, "%\n"))
 ```
+
+
 Fit Model 2
 ```{r}
 # library model GLM
@@ -364,6 +370,8 @@ model_glm_2 <- glm(sales ~ youtube + facebook + newspaper, data = trainingset,
 # melihat hasil model prediksi
 summary(model_glm_2)
 ```
+
+
 ```{r}
 # Melakukan prediksi produksi dengan model GLM pada data testing
 predicted_glm_2 <- predict(model_glm_2, newdata = testingset, type = "response")
@@ -371,6 +379,8 @@ predicted_glm_2 <- predict(model_glm_2, newdata = testingset, type = "response")
 # Menampilkan hasil prediksi
 head(predicted_glm_2)
 ```
+
+
 ```{r}
 # Visualisasi Hasil
 result_data_glm_2 <- data.frame(sales = testingset$sales, Predictions = predicted_glm_2)
@@ -385,6 +395,8 @@ ggplot(data = result_data_glm_2, aes(x = sales, y = Predictions)) +
   ggtitle("Comparison of Actual Sales and GLM Model Prediction") +
   theme_minimal()
 ```
+
+
 ```{r}
 # Visualisasi Produksi Aktual dengan Hasil Prediksi
 ggplot(data = result_data_glm_2, aes(x = 1:length(sales))) +
