@@ -15,6 +15,8 @@ Regresi logistik merupakan salah satu alat analisis yang umum digunakan dalam st
 
 # Load packages
 ```{r}
+#library dplyr + ggplot2 + lubridate
+
 library (tidyverse)
 
 ```
@@ -26,19 +28,27 @@ data yang digunakan adalah dataset diabetes.csv. Dataset ini berisikan beberapa 
 data <- read.csv("data/diabetes.csv")
 head(data)
 ```
+
 ## Melihat ringkasan data
 
 ```{r}
 summary(data)
 ```
-Bisa dilihat bahwa, tidak ada data NA's dalam data yang akan digunakan
+Bisa dilihat bahwa, tidak ada data NA's dalam data yang akan digunakan.
+
+```{r}
+colSums(is.na(data))
+```
 
 ## Melihat struktur data
 
 ```{r}
 glimpse(data)
 ```
-Bisa dilihat bahwa 8 buah variabel bertipe data numerik dan ada 1 variabel (`Outcome`) yang bertipe kategorikal (kategorik). Kita asumsikan 1 = Yes, dan 0 = No
+Bisa dilihat bahwa 8 buah variabel bertipe data numerik dan ada 1 variabel (`Outcome`) yang bertipe kategorikal (kategorik). Kita asumsikan 1 = Yes, dan 0 = No, jadi bisa disimpulkan variabel dependen (respon) adalah `Outcome`. Untuk variabel yang lain adalah variabel independen (prediktor). 
+
+**Problem**:
+Kita akan prediksi, variabel-variabel apa saja yang mempengaruhi seseorang terkena diabetes (Outcome = 1).
 
 ## Visualiasi data
 kita akan memvisualisasi salah satu data numerik/integer, misalnya kita akan memvisualisasi variabel `DiabetePedigreeFunction` dengan menggunakan Histogram
@@ -175,10 +185,54 @@ Berdasarkan hasil perhitungan diperoleh nilai VIF untuk seluruh variabel predikt
 Berdasarkan kasus diatas, cobalah anda lakukan klasifikasi untuk mengidentifikasi pasien yang terkena diabetes dan yang tidak terkena diabetes serta lakukan evaluasi atas model klasifikasi yang sudah dihasilkan. Partisilah data ke dalam data training dan data testing.
 
 ```{r}
+# Load Library
+
+library(caret) # libary partiisi data
+library(randomForest) # library klasifikasi Random Forest
+```
+
+
+```{r}
+# Membagi Dataset
+set.seed(100) #pengambilan data secara random
+#untuk data training diambil 70%, sisanya untuk data testing, berdasarkan variabel outcome
+index_train <- createDataPartition(data$Outcome,
+                                   p = 0.7,list = FALSE)
+
+data.train <- data[index_train,] # 70% untuk data training
+data.test <- data[-index_train,] # sisanya atau 30% untuk data testing
+```
+
+```{r}
+dim(data.train)
+dim(data.test)
+```
+```{r}
+## Memodelkan klasifikasi
+
+set.seed(123) #menentukan nilai acak dari data
+modelForest <- randomForest(data=data.train,
+               as.factor(Outcome)~.,
+               ntree=100, mtry=3)
+
+modelForest
+```
+Dari mode dapat dilihat bahwa tingkat kesalahan adalah 23.16%, dengan akurasi sebesar 76.84%
+
+```{r}
+prediksiForest <- predict(modelForest, data.test, type = "prob")
+head(prediksiForest, n=10)
+```
+
+```{r}
+plot(prediksiForest)
+```
+**Latihan**
+Evaluasi model Klasifikasi dengan Accuracy, Precision, dan Recall
+```{r}
 # your code
 
 
 
 ```
-
 

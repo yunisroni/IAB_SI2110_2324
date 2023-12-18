@@ -1,0 +1,223 @@
+---
+title: "Tugas 02 Solution"
+author: "Roni Yunis"
+date: "3/8/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+# Import Data
+
+```{r}
+library(dplyr)
+library(readxl)
+credit <- read_excel("data/Credit Risk Data.xlsx", sheet = "Base Data")
+```
+
+
+# Menampilkan struktur data
+```{r}
+str(credit)
+```
+Penjelasan variabel:
+
+  1. LoanPurpose type data char
+  2. Checking type data char
+  3. Savings type data char
+  4. MonthsCustomer type data integer
+  5. MonthsEmployed type data integer
+  6. Gender type data char
+  7. MaritalStatus type data char
+  8. Age type data integer
+  9. Housing type data char
+  10. Years type data integer
+  11. Job type data char
+  12. CreditRisk type data char
+
+
+```{r}
+dim(credit)
+```
+Data terdiri dari 425 baris dan 12 kolom
+
+```{r}
+summary(credit )
+```
+```{r}
+#6 baris teratas
+head(credit)
+```
+
+```{r}
+#6 baris terbawah
+tail (credit)
+```
+
+# Exploratory Data Analysis
+
+```{r}
+colSums(is.na(credit))
+```
+tidak ada data yang missing value
+
+```{r}
+credit %>%
+  count(LoanPurpose, name = "freq", sort = TRUE)
+```
+Tujuan kredit yang paling banyak adalah Small Appliance
+
+```{r}
+credit %>%
+  count(Gender, name = "freq", sort = TRUE)
+```
+Jenis kelamin yang paling banyak mengajukan pinjaman adalah Laki-laki
+
+```{r}
+table(credit$CreditRisk)
+```
+Frekewnsi resiko kredit High = 211 dan Low = 21
+
+```{r}
+prop.table(table(credit$CreditRisk))
+```
+Proporsi jumlah resiko kredit High sebesar 49,6% dan Low sebesar 50,4%
+
+```{r}
+prop.table(table(credit$CreditRisk, credit$Gender), margin = 2)
+```
+Perbandingan tingkat resikonya lebih tinggi perempuan dibandingkan laki-laki yaitu 57,7% : 45,9% 
+
+```{r}
+prop.table(table(credit$CreditRisk, credit$LoanPurpose), margin = 2)
+```
+Resiko paling tinggi adalah jenis pangajuan kredit *Large Appliance* yaitu sebesar 75%
+
+# Klasifikasi dengan Random Forest
+## Panggil library
+```{r}
+#package untuk praktisi data
+library(caret)
+#package untuk klasifikasi
+library(randomForest)
+#package untuk mengukur perfomansi model klasifikasi
+library(e1071)
+#package untuk menguji kehandalan dari model prediksi
+library(ROCit)
+```
+
+## Bagi partisi data
+```{r}
+set.seed(100) #pengambilan data secara random
+#untuk data training diambil 70%, sisanya untuk data testing
+index_train <- createDataPartition(credit$CreditRisk,
+                                   p = 0.7,list = FALSE)
+
+data.train <- credit[index_train,]
+data.test <- credit[-index_train,]
+```
+
+
+## Melihat hasil pembagian data
+```{r}
+dim(data.train)
+dim(data.test)
+```
+## Model klasifikasi dengan Random Forest
+```{r}
+set.seed(100) #menentukan nilai acak dari data
+forestKu <- randomForest(data=data.train,
+               as.factor(CreditRisk)~.,
+               ntree=500)
+```
+
+```{r}
+forestKu
+```
+Bisa dilihat bahwa error rate dari model adalah 34,9%, dengan akurasi sebesar 65,1% (0,65)
+
+
+## Importance
+```{r}
+importance(forestKu)
+```
+Bisa dilihat bahwa variabel yang sangat penting yaitu variabel *age*
+
+## Mengukur kinerja prediksi
+```{r}
+hasilPrediksi <- predict(forestKu, data.test, type="prob")
+head(hasilPrediksi, n=10)
+```
+
+## Menampilkan plot hasil prediksi
+```{r} 
+plot(hasilPrediksi )
+```
+```{r}
+prediksi.status.f <- ifelse(hasilPrediksi[,2] > 0.5, "Low", "High")
+
+#menghitung ukuran kinerja prediksi
+confusionMatrix(as.factor(prediksi.status.f), as.factor(data.test$CreditRisk))
+```
+Berdasarkan hasil diatas bisa lihat bahwa nilai akurasi sebesar 61,4%, Sensitivity (High) 63,5% dan Specificity (Low) 59,3%
+
+## Hitung Nilai Performance dari Prediksi
+
+```{r}
+ngitungROCf <- rocit(score=hasilPrediksi[,2],class=data.test$CreditRisk)
+plot(ngitungROCf)
+```
+```{r}
+AUCf <- ngitungROCf$AUC
+AUCf
+```
+Nilai AUC nya adalah 0,66, jadi bisa disimpulkan bahwa klasifikasi yang dihasilkan termasuk pada *poor classification*
+
+**O P T I O N A L**
+# Klasifikasi dengan Decision Tree
+## Panggil package
+```{r}
+library(rpart)
+library(rpart.plot)
+```
+
+## Model Klasifikasi dengan Decision Tree
+```{r}
+pohonKu <- rpart(data=data.train,
+               CreditRisk~.,
+               control = rpart.control(cp=0, minsplit=100))
+```
+
+```{r}
+pohonKu
+```
+## Menampilkan pohon klasifikasi
+```{r}
+rpart.plot(pohonKu, extra=4,box.palette="RdBu", shadow.col="gray", nn=TRUE)
+```
+## Mengukur kinerja prediksi
+```{r}
+prediksiTree <- predict(pohonKu, data.test)
+head(prediksiTree, n=10)
+```
+
+```{r}
+prediksi.status.t <- ifelse(prediksiTree[,2] > 0.5, "Low", "High")
+
+#menghitung ukuran kinerja prediksi
+confusionMatrix(as.factor(prediksi.status.t), as.factor(data.test$CreditRisk))
+```
+Berdasarkan hasil diatas bisa lihat bahwa nilai akurasi sebesar 55,9%, Sensitivity (High) 52,4% dan Specificity (Low) 59,4%
+
+
+## Hitung Nilai Performance dari Prediksi
+```{r}
+ngitungROCt <- rocit(score=prediksiTree[,2],class=data.test$CreditRisk)
+plot(ngitungROCt)
+```
+
+```{r}
+AUCt <- ngitungROCt$AUC
+AUCt
+```
+Nilai AUC nya adalah 0,59, jadi bisa disimpulkan bahwa klasifikasi yang dihasilkan termasuk pada *poor classification*
+
