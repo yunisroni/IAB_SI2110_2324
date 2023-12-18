@@ -1,0 +1,181 @@
+---
+title: "Tugas 03 Solutions"
+author: "Roni Yunis"
+date: "18/12/2023"
+output: pdf_document
+---
+
+# Load Package
+```{r}
+library (dplyr)
+library (lubridate)
+library (ggplot2)
+library (caTools)
+library (lubridate)
+
+```
+
+# Import Dataset dan summary data
+```{r}
+garment <- read.csv("data/garments_worker_productivity.csv")
+head(garment)
+```
+```{r}
+summary(garment)
+```
+Bisa dilihat bahwa pada variabel `wip` ada 506 data NA's atau missing value.
+
+# Exploratory Data Analysis dan Visualisasi
+## Membersihkan data yang missing value
+data yang sudah hapus missing value di simpan pada objek `clean_garment`
+```{r}
+clean_garment <- na.omit(garment)
+summary(clean_garment)
+```
+Bisa dilihat tidak ada lagi data yang missing value (NA's)
+
+## Melihat stuktur data dari objek `clean_garment`
+```{r}
+glimpse(clean_garment)
+```
+
+Bisa dilihat bahwa data yang sudah bersih dari missing value tinggal 691 observasi baris dengan 15 kolom/variabel
+
+## Merubah type data tanggal dari char menjadi date
+```{r}
+garment <- clean_garment %>% 
+  mutate (date = dmy(date)) %>% 
+  arrange(date)
+glimpse(garment)
+```
+## Menampilkan banyaknya transaksi berdasarkan variabel quarter
+```{r}
+garment %>%
+  group_by(quarter) %>%
+  count() %>%
+  arrange(-n)
+```
+
+Hasil analisis menunjukkan bahwa quarter dengan jumlah transaksi terbanyak adalah pada Quarter 1 sebanyak 211 jumlah transaksi.
+
+## Menampilkan jumlah actual productivity berdasarkan tanggal
+```{r}
+garment %>%
+  group_by(date) %>%
+  summarise(
+    jmlActPro = sum(actual_productivity)
+    )
+```
+
+
+## Memfilter nilai actual productity berdasarkan quarter 1
+```{r}
+garmentquarter1 <- filter(garment, quarter == "Quarter1")
+```
+
+```{r}
+daily_productivity_q1 <- garmentquarter1 %>%
+  group_by(date) %>%
+  summarise(
+    productivity = sum(actual_productivity)
+    )
+head(arrange(daily_productivity_q1, (-productivity)))
+```
+
+## Visualisasi hasil dari daily_productivity_q1
+```{r}
+daily_productivity_q1 %>% 
+  ggplot(aes(x=date, y=productivity)) +
+  geom_line(color = "tomato3") +
+  labs(title = "Daily Productivity Quarter 1",x = "Date",y = "Productivity") +
+  theme_minimal()
+```
+# Membagi data menjadi data training dan data testing
+```{r}
+splitdata <- sample.split(garment$actual_productivity, SplitRatio = 0.7)
+trainingset <- subset(garment, splitdata == TRUE)
+testingset <- subset(garment, splitdata == FALSE)
+```
+
+```{r}
+dim(trainingset)
+dim(testingset)
+```
+
+# Model Regresi Sederhana
+Liner regresi sederhana untuk mengukur pengaruh variabel `incentive` terhadap `actual_productivity`
+
+```{r}
+linermodel.s <- lm(actual_productivity ~ incentive,
+                     data = trainingset)
+summary(linermodel.s)
+```
+Kalau dilihat dari model diatas bisa dijelaskan bahwa insentive punya hubungan signifikan terhadap produktivity aktual, artinya bisa disimpulkan bahwa besaran insentive sangat berpengaruh pada peningkatan produktivitas aktual. Persamaan regresi dari model diatas adalah $actual_productity = 0.5222 + 0.0045 * incentive$
+
+## Prediksi Model Regresi dengan Data Testing
+```{r}
+yprediksi.s <- predict(linermodel.s, newdata = testingset)
+head(yprediksi.s)
+```
+
+
+## Visualisasi Hasil Data Training
+```{r}
+trainingset %>% 
+  ggplot ()+ 
+  geom_point(aes(x = incentive, y = actual_productivity)) +
+  geom_line(aes(x = incentive,
+                y = predict(linermodel.s, newdata = trainingset)), colour = 'blue') +
+  labs(title = "Pengaruh Insentive terhadap Produktivitas Aktual - Data Training",
+       x = "Insentif",
+       y = "Produktivitas Aktual" ) +
+  theme_minimal()
+       
+```
+## Visualisasi Hasil Data Testing
+```{r}
+testingset %>% 
+  ggplot ()+ 
+  geom_point(aes(x = incentive, y = actual_productivity)) +
+  geom_line(aes(x = incentive,
+                y = predict(linermodel.s, newdata = testingset)), colour = 'blue') +
+  labs(title = "Pengaruh Insentive terhadap Produktivitas Aktual - Data Testing",
+       x = "Insentif",
+       y = "Produktivitas Aktual" ) +
+  theme_minimal()
+```
+Berdasarkan visualisasi diatas bisa dilihat bahwa model regresi liner yang dihasilkan dapat memprediksi data testing
+
+# Model Regresi Berganda
+Liner regresi berganda untuk mengukur pengaruh variabel `over_time`, `incentive`, `idle_time`, `idle_men` terhadap `actual_productivity`
+
+```{r}
+linermodel.b <- lm(actual_productivity ~ idle_men + idle_time + incentive + smv + no_of_workers, data = garment )
+summary(linermodel.b)
+```
+Berdasarkan hasil diatas bisa dilihat bahwa variabel bebas (idle_men, incentive, smv) berhubungan secara signifikan dengan actual_productivity. Sementara Variabel idle_time dan no_of_workers tidak berpengaruh pada actual_productivity. Persaman regresi liner dari model diatas adalah sebagai berikut:
+$actual_productivity = 0,577 - 0,0045*idle_men + 0,0043*incentive - 0.0016*smv
+
+Berdasarkan persamaan diatas cobalah hitung nilai actual_productivity, kalau diketahui:
+smv = 26.82
+idle_men = 2
+incentive = 26
+
+```{r}
+actual_productivity = 0.577 - 0.0045*2 + 0.0043*26 - 0.0016*26.82
+actual_productivity
+```
+## Confident Interval
+```{r}
+confint(linermodel.b)
+```
+
+## Akurasi Model
+```{r}
+sigma(linermodel.b)/mean(clean_garment$actual_productivity)
+```
+Jadi bisa dilihat bahwa tingkat kesalahan (error rate) dari model yang sudah dihasilkan adalah sebesar 12 % dengan akurasi sebesar 88%
+
+
+
+
