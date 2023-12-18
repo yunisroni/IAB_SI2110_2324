@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: "Tugas 04 Solutions"
 author: "Roni Yunis"
@@ -125,3 +126,6 @@ Berdasarkan hasil analisa diatas, maka bisa disimpulkan bahwa.
 
 1. Ada 3 klaster besar yang berisi banyak rules, yaitu klaster *Bread and cake*, *vegetables*, dan *baking needs*. Sehingga bisa diusulkan jika ketiga product ini di bundle menjadi satu kesatuan dan diberikan potongan/discount, maka diharapkan dapat meningkatkan jumlah penjualan. 
 2. Ada 5 jenis item barang yaitu *souces gravy pkle*, *juice sat cord ms*, *bread and cake*, *biscuit*, dan *baking need*, yang dapat meningkatkan peluang pembelian dari *party snack foods*
+=======
+
+>>>>>>> 9e4728bba504912b5cc74719e3c969c220304182
