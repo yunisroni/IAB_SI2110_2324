@@ -242,7 +242,7 @@ head(data.test$Outcome,10)
 ```
 
 ```{r}
-plot(table(data.test$Outcome))
+barplot(table(data.test$Outcome))
 ```
 
 
