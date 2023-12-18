@@ -195,9 +195,10 @@ library(randomForest) # library klasifikasi Random Forest
 ```{r}
 # Membagi Dataset
 set.seed(100) #pengambilan data secara random
+
 #untuk data training diambil 70%, sisanya untuk data testing, berdasarkan variabel outcome
 index_train <- createDataPartition(data$Outcome,
-                                   p = 0.7,list = FALSE)
+                                   p = 0.8,list = FALSE)
 
 data.train <- data[index_train,] # 70% untuk data training
 data.test <- data[-index_train,] # sisanya atau 30% untuk data testing
@@ -211,24 +212,46 @@ dim(data.test)
 ## Memodelkan klasifikasi
 
 set.seed(123) #menentukan nilai acak dari data
+
 modelForest <- randomForest(data=data.train,
                as.factor(Outcome)~.,
-               ntree=100, mtry=3)
+               ntree=400, mtry=3)
 
 modelForest
 ```
-Dari mode dapat dilihat bahwa tingkat kesalahan adalah 23.16%, dengan akurasi sebesar 76.84%
+Dari mode dapat dilihat bahwa tingkat kesalahan adalah 22.44%, dengan akurasi sebesar 77.56%
+
+**Latihan**
+Lakukan tuning hyperparameter untuk meningkatkan kinerja dari model.
 
 ```{r}
-prediksiForest <- predict(modelForest, data.test, type = "prob")
+# your code
+
+
+
+```
+
+
+
+```{r}
+prediksiForest <- predict(modelForest, data.test)
 head(prediksiForest, n=10)
 ```
+```{r}
+head(data.test$Outcome,10)
+```
+
+```{r}
+plot(table(data.test$Outcome))
+```
+
+
 
 ```{r}
 plot(prediksiForest)
 ```
 **Latihan**
-Evaluasi model Klasifikasi dengan Accuracy, Precision, dan Recall
+Evaluasi model Klasifikasi dengan `Accuracy`, `Precision`, dan `Recall`
 ```{r}
 # your code
 
