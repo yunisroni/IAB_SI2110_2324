@@ -5,9 +5,9 @@ date: '2023-12-18'
 output:
 ---
 
-Regresi Logistik adalah model statistika yang dapat digunakan untuk menganalisis pola hubungan antara sekumpulan variabel independen dengan suatu variabel dependen bertipe kategorik atau kualitatif. Regresi logistik adalah suatu metode statistik yang digunakan untuk memodelkan hubungan antara satu atau lebih variabel independen (prediktor) dengan variabel dependen biner (hasil yang hanya memiliki dua kemungkinan nilai, misalnya 0 dan 1). Regresi logistik umumnya digunakan untuk menganalisis hubungan antara variabel-variabel tersebut dan untuk memprediksi probabilitas terjadinya suatu peristiwa tertentu.
+**Regresi Logistik** adalah model statistika yang dapat digunakan untuk menganalisis pola hubungan antara sekumpulan variabel independen dengan suatu variabel dependen bertipe kategorik atau kualitatif. **Regresi logistik** adalah suatu metode statistik yang digunakan untuk memodelkan hubungan antara satu atau lebih variabel independen (prediktor) dengan variabel dependen biner (hasil yang hanya memiliki dua kemungkinan nilai, misalnya 0 dan 1). Regresi logistik umumnya digunakan untuk menganalisis hubungan antara variabel-variabel tersebut dan untuk memprediksi probabilitas terjadinya suatu peristiwa tertentu.
 
-Regresi logistik memanfaatkan fungsi logistik (atau sigmoid) untuk memetakan nilai-nilai prediktor ke dalam rentang antara 0 dan 1. Fungsi logistik ini membentuk kurva S-shaped, sehingga cocok untuk memodelkan probabilitas. Model regresi logistik mengestimasi koefisien-koefisien yang menggambarkan kontribusi relatif setiap variabel independen terhadap log-odds atau logit dari kejadian sukses.
+**Regresi logistik memanfaatkan fungsi logistik (atau sigmoid) untuk memetakan nilai-nilai prediktor ke dalam rentang antara 0 dan 1**. Fungsi logistik ini membentuk kurva S-shaped, sehingga cocok untuk memodelkan probabilitas. Model regresi logistik mengestimasi koefisien-koefisien yang menggambarkan kontribusi relatif setiap variabel independen terhadap log-odds atau logit dari kejadian sukses.
 
 Berbeda dengan regresi linear, di mana variabel dependen dapat memiliki nilai kontinu, regresi logistik lebih sesuai untuk kasus di mana variabel dependen bersifat biner atau kategorikal. Beberapa contoh penerapan regresi logistik meliputi prediksi peluang keberhasilan atau kegagalan suatu peristiwa, seperti prediksi apakah seseorang akan membeli suatu produk, mengikuti suatu program, atau mengalami suatu kondisi medis.
 
@@ -87,6 +87,7 @@ Berdasarkan dari Model 1 masih ditemui variabel yang tidak berpengaruh signifika
 logit2 <- glm(Outcome~Pregnancies+Glucose+BloodPressure+
                       SkinThickness+Insulin+BMI+DiabetesPedigreeFunction, data = data, family = binomial(link="logit"))
 summary(logit2)
+
 ```
 Pada model ini masih ditemukan variabel yang tidak signifikan, sehingga perlu dilakukan eliminasi pada variabel `Insulin`.
 
@@ -109,15 +110,31 @@ summary(logit4)
 Bisa dilihat bahwa pada Model 4, nilai p-value pada semua variabel sudah berpengaruh signifikan, karena nilai p-value< 0,05.Sehingga bisa dilanjutkan ketahap berikutnya
 
 # Memilih model regresi terbaik
-Metode yang dapat digunakan untuk memilih model regresi terbaik adalah metode AIC dan SIC. Model regresi terbaik apabila memiliki nilai AIC terkecil. Sekarang kita akan menghitung berapa nilai AIG dari masing-masing model tersebut.
+Metode yang dapat digunakan untuk memilih model regresi terbaik adalah metode AIC dan SIC. 
+AIC (Akaike Information Criterion) dan SIC (Schwarz Information Criterion), juga dikenal sebagai BIC (Bayesian Information Criterion), adalah dua metrik yang digunakan untuk mengevaluasi dan membandingkan kualitas relatif dari model statistik yang berbeda. Kedua kriteria ini sering digunakan dalam konteks pemilihan model untuk membantu memilih model yang paling sesuai atau optimal.
+
+Model regresi terbaik apabila memiliki nilai AIC terkecil. Sekarang kita akan menghitung berapa nilai AIG dari masing-masing model tersebut.
 
 ```{r}
-model <- c("Model_1","Model_2","Model_3","Model_4")
+model_AIC <- c("Model_1","Model_2","Model_3","Model_4")
        AIC <- c(logit1$aic,logit2$aic,logit3$aic,logit4$aic)
-       kriteria <- data.frame(model,AIC)
+       kriteria <- data.frame(model_AIC,AIC)
        kriteria 
 ```
 Dari hasil output diatas dapat dilihat bahwa Model 4 merupakan model yang terbaik karena memiliki nilai AIC terkecil yaitu 740.5596.
+
+**Latihan**
+Lakukan secara mandiri, berapakah nilai metrik SIC dari model?
+
+```{r}
+#your code
+
+
+
+```
+
+
+
 
 # Goodness of Fit (Kebaikan Model)
 
@@ -133,7 +150,7 @@ Kesimpulannya adalah, semakin kecil nilai (1 - rasio likelihood), semakin baik m
 logitfinal <- glm(Outcome~1, data=data, family =binomial(link="logit"))
        1-as.vector(logLik(logit4)/logLik(logitfinal)) 
 ```
-Dari hasil output diatas bisa disimpulkan bahwa Model 4 sudah memenuhi asumsi goodness of fit. 
+Dari hasil output diatas bisa disimpulkan bahwa Model_4 sudah memenuhi asumsi _goodness of fit_. 
 
 Selanjutnya adalah menghitung nilai VIF. VIF (Variance Inflation Factor) adalah ukuran yang digunakan dalam analisis regresi untuk menilai sejauh mana tingkat variabilitas (variansi) suatu koefisien regresi dapat disebabkan oleh ketergantungan dengan variabel prediktor lain dalam model. VIF membantu mendeteksi multicollinearity, yaitu kondisi ketika dua atau lebih variabel prediktor dalam model memiliki ketergantungan yang tinggi satu sama lain.
 
@@ -155,7 +172,7 @@ vif(logit4)
 Berdasarkan hasil perhitungan diperoleh nilai VIF untuk seluruh variabel prediktor dalam Model_4 < 5, sehingga asumsi multikolinearitas terpenuhi (tidak terjadi multikolinearitas antar variabel). Jadi bisa disimpulkan bahwa variabel `Pregnancies`, `Glucose`, `BloodPressure`, `BMI`, dan `DiabetesPredigreeFunction` berpengaruh signifikan terhadap `Outcome`
 
 # Latihan
-Berdasarkan kasus diatas, cobalah anda lakukan klasifikasi untuk mengidentifikasi pasien yang terkena diabetes dan yang tidak terkena diabetes
+Berdasarkan kasus diatas, cobalah anda lakukan klasifikasi untuk mengidentifikasi pasien yang terkena diabetes dan yang tidak terkena diabetes serta lakukan evaluasi atas model klasifikasi yang sudah dihasilkan. Partisilah data ke dalam data training dan data testing.
 
 ```{r}
 # your code
