@@ -1,10 +1,9 @@
 ---
 title: "Tugas 02 Solution"
 author: "Roni Yunis"
-date: "3/8/2021"
+date: "18/12/2023"
 output:
-  pdf_document: default
-  html_document: default
+
 ---
 # Import Data
 

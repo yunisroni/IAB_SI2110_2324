@@ -1,0 +1,166 @@
+---
+title: "UTS_Solutions"
+author: "Roni Yunis"
+date: "2023-12-19"
+output: html_document
+---
+
+# 1. Install/Load Library
+```{r}
+library(tidyverse)
+
+```
+
+# 2. Import Dataset
+```{r}
+social_data <- read.csv("data/Social_Network_Ads.csv")
+social_data
+```
+
+# 3. Melihat Struktur Data
+```{r}
+glimpse(social_data)
+```
+# 4. Menampilkan 6 data teratas dan 6 data terbawah
+```{r}
+head(social_data)
+tail(social_data)
+```
+
+# 5. Menampilkan ringkasan data
+```{r}
+summary(social_data)
+```
+
+# 6. Menampikan proporsi pelanggan berdasarkan gender
+```{r}
+prop.table(table(social_data$Gender))
+```
+Dari hubungan 2 kategori tersebut bisa dilihat bahwa nilai proporsi atau presentase
+pelanggan dalam “social_data” berdasarkan gender Female (Perempuan) adalah 0.51
+atau 51% dan berdasarkan gender Male (Laki-laki) adalah 0.49 atau 49%. Sehingga
+hasil tersebut mengindikasikan bahwa dalam data “social_data”, sekitar 51% dari
+pelanggan adalah perempuan (Female), sementara sekitar 49% sisanya adalah laki-laki
+(Male). Proporsi atau presentase ini menggambarkan sebaran jenis kelamin pelanggan
+dalam dataset tersebut. Jadi, lebih dari setengah pelanggan adalah perempuan
+sementara sisanya adalah laki-laki.
+
+# 7. Menampilkan usia terendah dan teringgi
+```{r}
+range(social_data$Age)
+```
+Telihat bahwa usia pelanggan yang terdata dalam dataset “social_data” tersebut yang
+terendah adalah 18 tahun dan usia tertinggi pelanggan yang terdata dalam dataset
+“social_data” tersebut adalah 60 tahun
+
+# 8. Visualisasi menampilkan jumlah user berdasarkan umur
+```{r}
+ggplot(social_data) + 
+  aes(x = Age) +
+  geom_bar() +
+  labs(x="Umur",
+       y="Jumlah User",
+       title="Visualisasi Jumlah User Berdasarkan Umur") +
+ theme_minimal()
+```
+# 9. Visualisasi tingkat pembelian
+```{r}
+ggplot(social_data) +
+  aes(x = Purchased) +
+  geom_bar() +
+  labs(title = "Tingkat Pembelian") +
+  theme_minimal()
+```
+# 10. Menampilkan purchase berdasarkan gender
+```{r}
+ggplot(social_data) +
+  aes(x = Purchased, fill = Gender) +
+  geom_bar() +
+  theme_minimal()
+```
+# 11. Visualisasi perbandingan antara umur dan 
+```{r}
+boxplot(social_data$Age ~ social_data$Purchased)
+```
+# 12. Visualisasi menampilkan umur dan estimasi salary berdasarkan purchased dan gender
+```{r}
+ggplot(social_data) +
+  aes(x = Age, y = EstimatedSalary, colour = Gender, fill = factor(Purchased)) +
+  geom_point() +
+  scale_color_hue() +
+  labs(x = "Age",
+       y = "Estimated Salary") +
+  theme_minimal()
+```
+# 13. Install dan Load Library caret, randomForest, e1071 dan ROCit
+```{r}
+library(caret)
+library(randomForest)
+library(e1071)
+library(ROCit)
+```
+
+# 14. Partisi dataset 70:30
+```{r}
+set.seed(100)
+index_train <- createDataPartition(social_data$Purchased,
+                                   p = 0.7, list = FALSE)
+
+data.train <- social_data[index_train,] # 70% data training
+data.test <- social_data[-index_train,] # 30% data testing
+```
+
+# 15. Tampilkan dimensi dataset
+```{r}
+dim(data.train)
+dim(data.test)
+```
+Setelah dibagi, maka bisa dijelaskan bahwa untuk data training terdapat 280 baris data
+dan untuk data testing terdapat 120 baris data yang digunakan untuk mendukung
+klasifikasikan yang akan dilakukan
+
+# 16. Klasifikasi dengan Model Random Forest
+```{r}
+#set.seed(123)
+forestUTS <- randomForest(data = data.train,
+                          as.factor(Purchased)~.,
+                          ntree=100, mtry=3) # jumlah tree = 100
+forestUTS
+```
+# 17. Prediksi dengan data testing
+```{r}
+hasilforestUTS <- predict(forestUTS, data.test, type = "prob")
+```
+
+# 18. Tampilkan 6 prediksi teratas
+```{r}
+head(hasilforestUTS)
+```
+
+# 19. Visualisasi hasil plot prediksi
+```{r}
+plot(hasilforestUTS)
+```
+# 20. Mengukur kinerja dan performansi hasil prediksi
+```{r}
+prediksi.status.f <- ifelse(hasilforestUTS[,2] > 0.5, "1", "0")
+
+confusionMatrix(as.factor(prediksi.status.f),
+                as.factor(data.test$Purchased))
+```
+```{r}
+# Nilai performansi
+hitungROCf <- rocit(score = hasilforestUTS[,2], class = data.test$Purchased)
+plot(hitungROCf)
+```
+```{r}
+AUCf <- hitungROCf$AUC
+AUCf
+```
+**Kesimpulan**:
+Berdasarkan hasil diatas dapat dilihat bahwa nilai akurasi pada kinerja prediksi ini
+sebesar 0.9 (90%), dengan nilai AUC (Area Under Curve) yang merupakan ketepatan
+prediksi klasifikasi yang sudah dilakukan yaitu sebesar 0.9421 (94,21%) yang artinya
+klasifikasi yang dihasilkan termasuk pada exellence classification. Dapat dikatakan
+bahwa predikasi ini memiliki tingkat akurasi yang tinggi dan klasifikasi yang sangat
+baik
