@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ---
 title: "Tugas 03 Solutions"
 author: "Roni Yunis"
