@@ -68,7 +68,7 @@ slices <- c(YES,NO)
 lbls <- c("Teridentifikasi","Tidak Teridentifikasi")
 lbls <- paste(lbls, slices)
 lbls <- paste(lbls)
-pie(slices,labels = lbls, col=rainbow(length(lbls)),
+  pie(slices,labels = lbls, col=rainbow(length(lbls)),
     main="Pie Chart of Diabetes")
 ```
 # Menghitung korelasi antar variabel
@@ -127,9 +127,9 @@ Model regresi terbaik apabila memiliki nilai AIC terkecil. Sekarang kita akan me
 
 ```{r}
 model_AIC <- c("Model_1","Model_2","Model_3","Model_4")
-       AIC <- c(logit1$aic,logit2$aic,logit3$aic,logit4$aic)
-       kriteria <- data.frame(model_AIC,AIC)
-       kriteria 
+AIC <- c(logit1$aic,logit2$aic,logit3$aic,logit4$aic)
+kriteria <- data.frame(model_AIC,AIC)
+kriteria 
 ```
 Dari hasil output diatas dapat dilihat bahwa Model 4 merupakan model yang terbaik karena memiliki nilai AIC terkecil yaitu 740.5596.
 
@@ -138,7 +138,20 @@ Lakukan secara mandiri, berapakah nilai metrik SIC dari model?
 
 ```{r}
 #your code
+# Jumlah observasi (gantilah dengan jumlah observasi sesuai data Anda)
+nobs <- nrow(data)
 
+# Jumlah parameter untuk masing-masing model (gantilah dengan jumlah parameter sesuai model Anda)
+df <- c(9,8,7,6)
+
+# Menghitung SIC
+SIC <- AIC + (df * log(nobs)) / 2
+
+# Menambahkan hasil BIC ke dalam dataframe
+kriteria$SIC <- SIC
+
+# Menampilkan hasil
+kriteria
 
 
 ```
@@ -200,7 +213,7 @@ set.seed(100) #pengambilan data secara random
 index_train <- createDataPartition(data$Outcome,
                                    p = 0.8,list = FALSE)
 
-data.train <- data[index_train,] # 70% untuk data training
+data.train <- data[index_train,] # 80% untuk data training
 data.test <- data[-index_train,] # sisanya atau 30% untuk data testing
 ```
 
@@ -219,7 +232,7 @@ modelForest <- randomForest(data=data.train,
 
 modelForest
 ```
-Dari mode dapat dilihat bahwa tingkat kesalahan adalah 22.44%, dengan akurasi sebesar 77.56%
+Dari mode dapat dilihat bahwa tingkat kesalahan adalah 22.93%, dengan akurasi sebesar 77.07%
 
 **Latihan**
 Lakukan tuning hyperparameter untuk meningkatkan kinerja dari model.
@@ -235,27 +248,51 @@ Lakukan tuning hyperparameter untuk meningkatkan kinerja dari model.
 
 ```{r}
 prediksiForest <- predict(modelForest, data.test)
-head(prediksiForest, n=10)
+head(prediksiForest, 20)
 ```
 ```{r}
-head(data.test$Outcome,10)
+head(data.test$Outcome,20)
 ```
-
-```{r}
-barplot(table(data.test$Outcome))
-```
-
-
 
 ```{r}
 plot(prediksiForest)
 ```
-**Latihan**
-Evaluasi model Klasifikasi dengan `Accuracy`, `Precision`, dan `Recall`
 ```{r}
-# your code
-
-
-
+conf_Matrix <- table(prediksiForest, data.test$Outcome)
+conf_Matrix
 ```
 
+**Latihan**
+Evaluasi model Klasifikasi dengan `Accuracy`, `Precision`, dan `Recall`
+
+```{r}
+# your code
+cm <-  table(data.test[,9], prediksiForest)
+
+accuracy <- confusionMatrix(cm)$overall["Accuracy"]
+precision <- confusionMatrix(cm)$byClass["Precision"]
+sensitivity <- confusionMatrix(cm)$byClass["Sensitivity"]
+F1 <- confusionMatrix(cm)$byClass["F1"]
+
+#Menampilkan hasil evaluasi 
+accuracy
+precision
+sensitivity
+F1
+
+```
+```{r}
+# Visualisasi kurva ROC
+library(pROC)
+
+
+roc_curve <- roc(data.test$Outcome, as.numeric(prediksiForest))
+plot(roc_curve, main = "ROC Curve", col = "blue", lwd = 2)
+```
+**Interpretasi dan Kesimpulan:** 
+
+- Nilai akurasi Anda adalah 0.7581699, yang berarti model Anda berhasil mengklasifikasikan dengan benar sekitar 74.5% dari seluruh instance.
+- Nilai precision Anda adalah 0.8673469, yang berarti sekitar 86.7% dari instance yang diklasifikasikan sebagai positif oleh model adalah benar-benar positif.
+- Nilai sensitivity Anda adalah 0.7657658, yang berarti model Anda berhasil mengidentifikasi sekitar 76.57% dari semua instance yang sebenarnya positif.
+- Nilai F1 score Anda adalah 0.8133971, yang menunjukkan keseimbangan yang baik antara precision dan recall.
+- Model ini memiliki kinerja yang baik secara umum, dengan akurasi yang lumayan dan keseimbangan yang baik antara precision dan recall.
