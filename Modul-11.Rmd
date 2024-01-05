@@ -6,6 +6,29 @@ output:
 ---
 
 # Pengantar
+
+**Big Data:**
+Big Data merujuk pada volume besar dan kompleks data yang tidak dapat secara efektif diolah atau dikelola menggunakan metode tradisional pemrosesan data. Data dalam skala besar ini seringkali berasal dari berbagai sumber, termasuk transaksi bisnis, media sosial, sensor IoT (Internet of Things), rekaman log, dan data lainnya. Big Data memiliki tiga karakteristik utama yang dikenal sebagai 3V: Volume (volume besar data), Variety (keragaman jenis data), dan Velocity (kecepatan pengumpulan dan pemrosesan data).
+
+**Tren Big Data di Masa Depan:**
+1. **Peningkatan Penggunaan Kecerdasan Buatan (AI) dan Machine Learning (ML):** Di masa depan, AI dan ML akan semakin mendominasi pengolahan dan analisis Big Data. Ini akan memungkinkan sistem untuk secara otomatis mengidentifikasi pola, tren, dan wawasan yang lebih dalam dari data berskala besar.
+
+2. **Integrasi Big Data dengan Internet of Things (IoT):** Seiring dengan pertumbuhan IoT, akan ada integrasi yang lebih erat antara Big Data dan data yang dihasilkan oleh perangkat IoT. Ini akan memberikan pemahaman yang lebih baik tentang kinerja perangkat, pemantauan real-time, dan mendukung pengambilan keputusan yang lebih tepat waktu.
+
+3. **Keamanan dan Kepatuhan:**
+   - **Keamanan Data yang Lebih Canggih:** Dengan peningkatan ancaman keamanan, solusi keamanan data untuk melindungi informasi sensitif akan menjadi semakin canggih dan terintegrasi.
+   - **Kepatuhan Regulasi:** Dengan meningkatnya regulasi terkait privasi data, organisasi akan semakin berfokus pada kepatuhan dan manajemen risiko untuk memastikan bahwa mereka mematuhi aturan dan peraturan yang berlaku.
+
+4. **Edge Computing untuk Pengolahan Data di Tempat:** Seiring dengan peningkatan jumlah data yang dihasilkan oleh perangkat di edge devices, pengolahan data di tempat (edge computing) akan menjadi tren, mengurangi latensi dan memungkinkan pengambilan keputusan yang lebih cepat.
+
+5. **Penggunaan Quantum Computing:** Meskipun masih dalam tahap pengembangan, quantum computing memiliki potensi untuk mengubah paradigma dalam pengolahan data berskala besar dengan memecahkan masalah yang sulit atau bahkan tidak dapat dipecahkan oleh komputer klasik.
+
+6. **Pengembangan Infrastruktur Big Data yang Lebih Efisien:** Dengan meningkatnya kesadaran akan dampak lingkungan, akan ada peningkatan fokus pada pengembangan infrastruktur Big Data yang lebih efisien secara energi untuk mengurangi jejak karbon.
+
+Tren-tren ini mencerminkan evolusi Big Data sebagai disiplin yang terus berkembang, memanfaatkan teknologi baru untuk memberikan wawasan yang lebih dalam dan memberdayakan organisasi untuk membuat keputusan yang lebih cerdas dan cepat. 
+
+Salah satu bentuk data yang termasuk ke dalam big data adalah **Data Time Series**
+
 **Data Time Series** adalah data yang diperoleh dari pengamatan satu objek dari beberapa periode waktu. Misalnya data jumlah mahasiswa dari tahun ke tahun, data nilai tukar dolar terhadap rupiah dari hari ke hari, data kasus covid dari bulan januari 2020 sampai periode saat ini, dan masih banyak contoh yang lainnya.
 
 Time series analysis adalah teknik statistik yang digunakan untuk menganalisis data yang dikumpulkan atau diukur secara berurutan selama periode waktu tertentu. Data time series mencakup observasi atau pengukuran yang dilakukan dalam interval waktu yang teratur. Contoh umum dari time series data termasuk data keuangan harian, data penjualan bulanan, atau data suhu harian.
