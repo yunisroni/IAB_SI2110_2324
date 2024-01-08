@@ -5,10 +5,6 @@ date: "2024-01-08"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 **NLP** atau _Natural Language Processing_ adalah cabang dari kecerdasan buatan yang fokus pada interaksi antara komputer dan bahasa manusia yang alami. NLP merupakan suatu teknik dalam Machine Learning (ML) yang memfokuskan pada pemahaman dan pengaplikasian hubungan antara bahasa manusia dengan komputer. Penerapan NLP melibatkan penggunaan model ML pada teks atau bahasa, termasuk juga dalam konteks pengolahan bahasa suara. **Tujuan utamanya** adalah memungkinkan komputer untuk memahami, memproses, dan menghasilkan bahasa manusia dengan cara yang bermakna. NLP adalah salah satu teknik/metode yang mendukung analisis big data.
 
 Contoh penerapan NLP dalam bidang bisnis meliputi:
